@@ -10,7 +10,7 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
 
   // Public routes
-  if (pathname === "/" || pathname === "/login" || pathname === "/register") {
+  if (pathname === "/" || pathname === "/login" || pathname === "/register" || pathname.startsWith("/invite/")) {
     if (isLoggedIn && (pathname === "/login" || pathname === "/register")) {
       return Response.redirect(new URL("/dashboard", req.nextUrl));
     }

@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { loginUser } from "@/lib/actions/auth";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
     setError("");
+    formData.set("callbackUrl", callbackUrl);
     const result = await loginUser(formData);
     if (result?.error) {
       setError(result.error);
@@ -93,5 +97,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

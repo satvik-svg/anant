@@ -30,6 +30,7 @@ model User {
   activities     ActivityLog[]
   notifications  Notification[]
   goals          Goal[]         @relation("GoalOwner")
+  sentInvites    ProjectInvite[] @relation("InviteSender")
 }
 
 model Team {
@@ -41,6 +42,7 @@ model Team {
   members    TeamMember[]
   projects   Project[]
   portfolios Portfolio[]
+  invites    ProjectInvite[]
 }
 
 model TeamMember {
@@ -72,6 +74,7 @@ model Project {
   sections   Section[]
   tasks      Task[]
   portfolios PortfolioProject[]
+  invites    ProjectInvite[]
 }
 
 model Section {
@@ -254,4 +257,20 @@ model PortfolioProject {
   project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@unique([portfolioId, projectId])
+}
+
+model ProjectInvite {
+  id           String   @id @default(uuid())
+  token        String   @unique @default(uuid())
+  projectId    String
+  teamId       String
+  invitedEmail String?  // Email of the person invited (optional for link-only invites)
+  invitedById  String   // User who created the invite
+  status       String   @default("pending") // "pending", "accepted", "expired"
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  team      Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  invitedBy User    @relation("InviteSender", fields: [invitedById], references: [id])
 }

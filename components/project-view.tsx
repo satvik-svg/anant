@@ -12,7 +12,9 @@ import {
   Filter,
   X,
   Search,
+  UserPlus,
 } from "lucide-react";
+import { InviteDialog } from "./invite-dialog";
 
 interface Section {
   id: string;
@@ -74,6 +76,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
   const [filterStatus, setFilterStatus] = useState<string>("");
   const [filterTrackingStatus, setFilterTrackingStatus] = useState<string>("");
   const [filterSearch, setFilterSearch] = useState("");
+  const [showInviteDialog, setShowInviteDialog] = useState(false);
 
   const hasActiveFilters = filterPriority || filterAssignee || filterStatus || filterTrackingStatus || filterSearch;
 
@@ -163,6 +166,16 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
                 </div>
               )}
             </div>
+
+            {/* Invite button */}
+            <button
+              onClick={() => setShowInviteDialog(true)}
+              className="ml-1 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition"
+              title="Invite people"
+            >
+              <UserPlus className="w-4 h-4" />
+              Invite
+            </button>
 
             {/* Add task */}
             <button
@@ -305,6 +318,15 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
           sections={project.sections}
           teamMembers={teamMembers}
           onClose={() => setShowCreateTask(false)}
+        />
+      )}
+
+      {/* Invite Dialog */}
+      {showInviteDialog && (
+        <InviteDialog
+          projectId={project.id}
+          projectName={project.name}
+          onClose={() => setShowInviteDialog(false)}
         />
       )}
     </div>

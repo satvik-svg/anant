@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { registerUser } from "@/lib/actions/auth";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { UserPlus, Mail, Lock, User, Loader2 } from "lucide-react";
 
-export default function RegisterPage() {
+function RegisterForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
     setError("");
+    formData.set("callbackUrl", callbackUrl);
     const result = await registerUser(formData);
     if (result?.error) {
       setError(result.error);
@@ -109,5 +113,13 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
   );
 }

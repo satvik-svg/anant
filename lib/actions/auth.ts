@@ -38,16 +38,18 @@ export async function registerUser(formData: FormData) {
   });
 
   // Sign in the user
+  const callbackUrl = (formData.get("callbackUrl") as string) || "/dashboard";
   await signIn("credentials", {
     email,
     password,
-    redirectTo: "/dashboard",
+    redirectTo: callbackUrl,
   });
 }
 
 export async function loginUser(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const callbackUrl = (formData.get("callbackUrl") as string) || "/dashboard";
 
   if (!email || !password) {
     return { error: "All fields are required" };
@@ -57,7 +59,7 @@ export async function loginUser(formData: FormData) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/dashboard",
+      redirectTo: callbackUrl,
     });
   } catch (error: unknown) {
     // NextAuth throws NEXT_REDIRECT on success, rethrow it
