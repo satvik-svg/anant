@@ -96,12 +96,12 @@ export function TeamManagement({ teams, currentUserId }: Props) {
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2">
-            <Users className="w-5 h-5 text-indigo-500" />
+            <Users className="w-5 h-5 text-[#6B7C42]" />
             Teams
           </h2>
           <button
             onClick={() => setShowCreateTeam(!showCreateTeam)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg hover:from-indigo-600 hover:to-purple-700 transition"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 transition"
           >
             <Plus className="w-4 h-4" />
             Create Team
@@ -115,7 +115,7 @@ export function TeamManagement({ teams, currentUserId }: Props) {
               value={newTeamName}
               onChange={(e) => setNewTeamName(e.target.value)}
               placeholder="Enter team name"
-              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleCreateTeam();
                 if (e.key === "Escape") setShowCreateTeam(false);
@@ -125,7 +125,7 @@ export function TeamManagement({ teams, currentUserId }: Props) {
             <button
               onClick={handleCreateTeam}
               disabled={!newTeamName.trim() || isPending}
-              className="px-4 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition disabled:opacity-50 flex items-center gap-2"
+              className="px-4 py-2.5 text-sm font-medium text-white bg-black rounded-xl hover:bg-gray-800 transition disabled:opacity-50 flex items-center gap-2"
             >
               {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create"}
             </button>
@@ -142,7 +142,7 @@ export function TeamManagement({ teams, currentUserId }: Props) {
       {/* Invite */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h2 className="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <UserPlus className="w-5 h-5 text-indigo-500" />
+          <UserPlus className="w-5 h-5 text-[#6B7C42]" />
           Invite Team Member
         </h2>
 
@@ -165,13 +165,13 @@ export function TeamManagement({ teams, currentUserId }: Props) {
               value={inviteEmail}
               onChange={(e) => setInviteEmail(e.target.value)}
               placeholder="Enter email address"
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
             />
           </div>
           <select
             value={inviteTeamId}
             onChange={(e) => setInviteTeamId(e.target.value)}
-            className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#6B7C42] outline-none"
           >
             <option value="">Select team</option>
             {teams.map((team) => (
@@ -183,7 +183,7 @@ export function TeamManagement({ teams, currentUserId }: Props) {
           <button
             onClick={handleInvite}
             disabled={!inviteEmail.trim() || !inviteTeamId || isPending}
-            className="px-4 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition disabled:opacity-50 flex items-center gap-2"
+            className="px-4 py-2.5 text-sm font-medium text-white bg-black rounded-xl hover:bg-gray-800 transition disabled:opacity-50 flex items-center gap-2"
           >
             {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Invite"}
           </button>
@@ -195,7 +195,7 @@ export function TeamManagement({ teams, currentUserId }: Props) {
         <div key={team.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-10 h-10 rounded-lg bg-[#6B7C42] flex items-center justify-center text-white font-bold text-sm">
                 {team.name[0].toUpperCase()}
               </div>
               <div>
@@ -216,7 +216,7 @@ export function TeamManagement({ teams, currentUserId }: Props) {
                   className="flex items-center justify-between px-6 py-3 hover:bg-gray-50"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
+                    <div className="w-8 h-8 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-xs font-medium">
                       {member.user.name[0].toUpperCase()}
                     </div>
                     <div>

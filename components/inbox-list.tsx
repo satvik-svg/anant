@@ -34,7 +34,7 @@ const TYPE_ICONS: Record<string, typeof Bell> = {
 
 const TYPE_COLORS: Record<string, string> = {
   assigned: "bg-blue-50 text-blue-600",
-  commented: "bg-purple-50 text-purple-600",
+  commented: "bg-[#EEF0E0] text-[#4A5628]",
   completed: "bg-green-50 text-green-600",
   mentioned: "bg-orange-50 text-orange-600",
   due_soon: "bg-red-50 text-red-600",
@@ -77,7 +77,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
           <button
             onClick={() => setFilter("all")}
             className={`px-3 py-1.5 text-sm rounded-lg transition ${
-              filter === "all" ? "bg-indigo-50 text-indigo-700 font-medium" : "text-gray-500 hover:bg-gray-100"
+              filter === "all" ? "bg-[#EEF0E0] text-[#4A5628] font-medium" : "text-gray-500 hover:bg-gray-100"
             }`}
           >
             All ({items.length})
@@ -85,7 +85,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
           <button
             onClick={() => setFilter("unread")}
             className={`px-3 py-1.5 text-sm rounded-lg transition ${
-              filter === "unread" ? "bg-indigo-50 text-indigo-700 font-medium" : "text-gray-500 hover:bg-gray-100"
+              filter === "unread" ? "bg-[#EEF0E0] text-[#4A5628] font-medium" : "text-gray-500 hover:bg-gray-100"
             }`}
           >
             Unread ({unreadCount})
@@ -95,7 +95,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
           <button
             onClick={handleMarkAllRead}
             disabled={isPending}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#4A5628] hover:bg-[#EEF0E0] rounded-lg transition"
           >
             <CheckCheck className="w-4 h-4" />
             Mark all read
@@ -122,7 +122,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
                 className={`flex items-start gap-3 p-4 rounded-xl border transition group ${
                   notification.read
                     ? "bg-white border-gray-100"
-                    : "bg-indigo-50/30 border-indigo-100"
+                    : "bg-[#EEF0E0]/30 border-[#D8E0A0]"
                 }`}
               >
                 <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${colorClass}`}>
@@ -144,7 +144,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
                         e.stopPropagation();
                         handleMarkRead(notification.id);
                       }}
-                      className="p-1.5 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-white transition"
+                      className="p-1.5 text-gray-400 hover:text-[#4A5628] rounded-lg hover:bg-white transition"
                       title="Mark as read"
                     >
                       <CheckCircle2 className="w-4 h-4" />

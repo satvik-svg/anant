@@ -93,7 +93,7 @@ export function SearchDialog() {
             placeholder="Search tasks & projects..."
             className="flex-1 text-sm outline-none"
           />
-          {isPending && <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />}
+          {isPending && <Loader2 className="w-4 h-4 text-[#6B7C42] animate-spin" />}
           <button onClick={() => setOpen(false)} className="p-1 text-gray-400 hover:text-gray-600">
             <X className="w-4 h-4" />
           </button>
@@ -141,7 +141,7 @@ export function SearchDialog() {
                         <p className="text-xs text-gray-400">{task.project.name} · {task.section.name}</p>
                       </div>
                       {task.assignee && (
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium" title={task.assignee.name}>
+                        <div className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium" title={task.assignee.name}>
                           {task.assignee.name[0].toUpperCase()}
                         </div>
                       )}

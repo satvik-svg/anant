@@ -55,8 +55,8 @@ export default async function DashboardPage() {
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
-              <Clock className="w-5 h-5 text-purple-600" />
+            <div className="w-10 h-10 rounded-lg bg-[#EEF0E0] flex items-center justify-center">
+              <Clock className="w-5 h-5 text-[#4A5628]" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900">{teams.length}</p>
@@ -98,7 +98,7 @@ export default async function DashboardPage() {
                   {project.name[0].toUpperCase()}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition truncate">
+                  <h3 className="font-semibold text-gray-900 group-hover:text-[#4A5628] transition truncate">
                     {project.name}
                   </h3>
                   <p className="text-sm text-gray-500 truncate">

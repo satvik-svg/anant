@@ -152,7 +152,7 @@ export function InviteDialog({ projectId, projectName, onClose }: Props) {
                   }}
                   onKeyDown={(e) => e.key === "Enter" && handleLookup()}
                   placeholder="name@example.com"
-                  className="w-full pl-9 pr-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full pl-9 pr-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent"
                 />
               </div>
               <button
@@ -172,7 +172,7 @@ export function InviteDialog({ projectId, projectName, onClose }: Props) {
           {/* Lookup result — found user */}
           {lookupResult && (
             <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-xl">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-medium text-sm flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#6B7C42] flex items-center justify-center text-white font-medium text-sm flex-shrink-0">
                 {lookupResult.avatar ? (
                   <img src={lookupResult.avatar} className="w-10 h-10 rounded-full" alt="" />
                 ) : (
@@ -248,13 +248,13 @@ export function InviteDialog({ projectId, projectName, onClose }: Props) {
               disabled={isCopyingLink}
               className="w-full flex items-center gap-3 p-3.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition group"
             >
-              <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-[#EEF0E0] flex items-center justify-center flex-shrink-0">
                 {copiedLink ? (
                   <Check className="w-5 h-5 text-green-600" />
                 ) : isCopyingLink ? (
-                  <Loader2 className="w-5 h-5 text-indigo-500 animate-spin" />
+                  <Loader2 className="w-5 h-5 text-[#6B7C42] animate-spin" />
                 ) : (
-                  <Link2 className="w-5 h-5 text-indigo-500" />
+                  <Link2 className="w-5 h-5 text-[#6B7C42]" />
                 )}
               </div>
               <div className="text-left flex-1">
@@ -274,11 +274,11 @@ export function InviteDialog({ projectId, projectName, onClose }: Props) {
               disabled={!email.includes("@") || isSendingEmail}
               className="w-full flex items-center gap-3 p-3.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition group disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-[#EEF0E0] flex items-center justify-center flex-shrink-0">
                 {isSendingEmail ? (
-                  <Loader2 className="w-5 h-5 text-purple-500 animate-spin" />
+                  <Loader2 className="w-5 h-5 text-[#6B7C42] animate-spin" />
                 ) : (
-                  <Mail className="w-5 h-5 text-purple-500" />
+                  <Mail className="w-5 h-5 text-[#6B7C42]" />
                 )}
               </div>
               <div className="text-left flex-1">
@@ -300,7 +300,7 @@ export function InviteDialog({ projectId, projectName, onClose }: Props) {
             <div className="p-3 bg-gray-50 rounded-xl">
               <p className="text-xs text-gray-500 mb-1 font-medium">Invite link (expires in 7 days)</p>
               <div className="flex items-center gap-2">
-                <code className="flex-1 text-xs text-indigo-600 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 truncate">
+                <code className="flex-1 text-xs text-[#4A5628] bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 truncate">
                   {generatedLink}
                 </code>
                 <button

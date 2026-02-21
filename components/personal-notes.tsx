@@ -39,7 +39,7 @@ const COLORS: { value: string; label: string; bg: string; border: string; card: 
   { value: "yellow", label: "Yellow", bg: "bg-yellow-50", border: "border-yellow-200", card: "bg-yellow-50" },
   { value: "green", label: "Green", bg: "bg-emerald-50", border: "border-emerald-200", card: "bg-emerald-50" },
   { value: "blue", label: "Blue", bg: "bg-blue-50", border: "border-blue-200", card: "bg-blue-50" },
-  { value: "purple", label: "Purple", bg: "bg-purple-50", border: "border-purple-200", card: "bg-purple-50" },
+  { value: "olive", label: "Olive", bg: "bg-[#EEF0E0]", border: "border-[#B8C87A]", card: "bg-[#EEF0E0]" },
   { value: "pink", label: "Pink", bg: "bg-pink-50", border: "border-pink-200", card: "bg-pink-50" },
   { value: "orange", label: "Orange", bg: "bg-orange-50", border: "border-orange-200", card: "bg-orange-50" },
 ];
@@ -72,12 +72,12 @@ export function PersonalNotes({ notes }: Props) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search notes..."
-            className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#6B7C42]"
           />
         </div>
         <button
           onClick={() => setShowCreate(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition"
         >
           <Plus className="w-4 h-4" /> New Note
         </button>
@@ -218,7 +218,7 @@ function NoteCard({ note }: { note: Note }) {
           <button
             onClick={handleSave}
             disabled={isPending}
-            className="px-3 py-1.5 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition"
+            className="px-3 py-1.5 text-xs bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 transition"
           >
             {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Save"}
           </button>
@@ -309,7 +309,7 @@ function CreateNoteDialog({ onClose }: { onClose: () => void }) {
               required
               autoFocus
               placeholder="Note title"
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#6B7C42]"
             />
           </div>
           <div>
@@ -318,7 +318,7 @@ function CreateNoteDialog({ onClose }: { onClose: () => void }) {
               name="content"
               rows={6}
               placeholder="Write something..."
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#6B7C42] resize-none"
             />
           </div>
           <div>
@@ -348,7 +348,7 @@ function CreateNoteDialog({ onClose }: { onClose: () => void }) {
             <button
               type="submit"
               disabled={isPending}
-              className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition inline-flex items-center gap-2"
+              className="px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 transition inline-flex items-center gap-2"
             >
               {isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               Create Note

@@ -63,14 +63,14 @@ const CATEGORIES: Record<string, { label: string; color: string; bg: string }> =
   feature: { label: "Feature", color: "text-blue-600", bg: "bg-blue-50" },
   improvement: { label: "Improvement", color: "text-green-600", bg: "bg-green-50" },
   bug: { label: "Bug Fix", color: "text-red-600", bg: "bg-red-50" },
-  other: { label: "Other", color: "text-purple-600", bg: "bg-purple-50" },
+  other: { label: "Other", color: "text-[#4A5628]", bg: "bg-[#EEF0E0]" },
 };
 
 const STATUSES: Record<string, { label: string; color: string; bg: string }> = {
   new: { label: "New", color: "text-blue-700", bg: "bg-blue-50" },
   under_review: { label: "Under Review", color: "text-amber-700", bg: "bg-amber-50" },
   approved: { label: "Approved", color: "text-green-700", bg: "bg-green-50" },
-  in_progress: { label: "In Progress", color: "text-indigo-700", bg: "bg-indigo-50" },
+  in_progress: { label: "In Progress", color: "text-[#4A5628]", bg: "bg-[#EEF0E0]" },
   done: { label: "Done", color: "text-emerald-700", bg: "bg-emerald-50" },
   archived: { label: "Archived", color: "text-gray-500", bg: "bg-gray-100" },
 };
@@ -312,7 +312,7 @@ function IdeaCard({
                 </span>
                 <span className="text-[11px] text-gray-400">·</span>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium">
+                  <div className="w-5 h-5 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium">
                     {idea.creator.name[0].toUpperCase()}
                   </div>
                   <span className="text-[11px] text-gray-500">{idea.creator.name}</span>
@@ -383,7 +383,7 @@ function CommentRow({ comment, currentUserId }: { comment: IdeaComment; currentU
 
   return (
     <div className="flex items-start gap-2.5 group">
-      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium shrink-0 mt-0.5">
+      <div className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium shrink-0 mt-0.5">
         {comment.author.name[0].toUpperCase()}
       </div>
       <div className="flex-1 min-w-0">

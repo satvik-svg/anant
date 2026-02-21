@@ -136,7 +136,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                         key={task.id}
                         onClick={() => onTaskClick(task.id)}
                         className={`grid grid-cols-12 gap-4 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 cursor-pointer transition border-l-2 ${
-                          SECTION_COLORS[section.name] || "border-l-indigo-500"
+                          SECTION_COLORS[section.name] || "border-l-[#6B7C42]"
                         }`}
                       >
                         {/* Task name */}
@@ -182,7 +182,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                                   {assigneeList.slice(0, 2).map((a) => (
                                     <div
                                       key={a.id}
-                                      className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium ring-2 ring-white"
+                                      className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium ring-2 ring-white"
                                       title={a.name}
                                     >
                                       {a.name[0].toUpperCase()}

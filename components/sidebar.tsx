@@ -61,7 +61,7 @@ export default function Sidebar({ user, projects, teams, unreadCount = 0 }: Side
       {/* Logo */}
       <div className="px-5 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-[#6B7C42] flex items-center justify-center">
             <CheckCircle className="w-5 h-5 text-white" />
           </div>
           <span className="text-lg font-bold text-gray-900">Anant</span>
@@ -83,7 +83,7 @@ export default function Sidebar({ user, projects, teams, unreadCount = 0 }: Side
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition ${
                 isActive
-                  ? "bg-indigo-50 text-indigo-700"
+                  ? "bg-[#EEF0E0] text-[#4A5628]"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               }`}
             >
@@ -122,7 +122,7 @@ export default function Sidebar({ user, projects, teams, unreadCount = 0 }: Side
                     href={`/dashboard/projects/${project.id}`}
                     className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition ${
                       isActive
-                        ? "bg-indigo-50 text-indigo-700 font-medium"
+                        ? "bg-[#EEF0E0] text-[#4A5628] font-medium"
                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
@@ -142,7 +142,7 @@ export default function Sidebar({ user, projects, teams, unreadCount = 0 }: Side
       {/* User */}
       <div className="border-t border-gray-100 p-3">
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-sm font-medium">
+          <div className="w-8 h-8 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-sm font-medium">
             {user.name?.[0]?.toUpperCase() || "U"}
           </div>
           <div className="flex-1 min-w-0">

@@ -154,7 +154,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
               {teamMembers.slice(0, 3).map((m) => (
                 <div
                   key={m.id}
-                  className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-xs font-medium ring-2 ring-white"
+                  className="w-7 h-7 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-xs font-medium ring-2 ring-white"
                   title={m.name}
                 >
                   {m.name[0].toUpperCase()}
@@ -170,7 +170,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
             {/* Invite button */}
             <button
               onClick={() => setShowInviteDialog(true)}
-              className="ml-1 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition"
+              className="ml-1 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#4A5628] bg-[#EEF0E0] rounded-lg hover:bg-[#E4E8CC] transition"
               title="Invite people"
             >
               <UserPlus className="w-4 h-4" />
@@ -183,7 +183,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
                 setDefaultSectionId(project.sections[0]?.id || null);
                 setShowCreateTask(true);
               }}
-              className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg hover:from-indigo-600 hover:to-purple-700 transition"
+              className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 transition"
             >
               <Plus className="w-4 h-4" />
               Add Task
@@ -197,7 +197,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
             onClick={() => setShowFilters(!showFilters)}
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg border transition ${
               hasActiveFilters
-                ? "border-indigo-300 bg-indigo-50 text-indigo-700"
+                ? "border-[#B8C87A] bg-[#EEF0E0] text-[#4A5628]"
                 : "border-gray-200 text-gray-500 hover:text-gray-700 hover:bg-gray-50"
             }`}
           >
@@ -213,7 +213,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
                   setFilterTrackingStatus("");
                   setFilterSearch("");
                 }}
-                className="ml-1 hover:text-indigo-900"
+                className="ml-1 hover:text-black"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -228,13 +228,13 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
                   value={filterSearch}
                   onChange={(e) => setFilterSearch(e.target.value)}
                   placeholder="Search tasks..."
-                  className="pl-7 pr-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-indigo-500 outline-none w-40"
+                  className="pl-7 pr-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#6B7C42] outline-none w-40"
                 />
               </div>
               <select
                 value={filterPriority}
                 onChange={(e) => setFilterPriority(e.target.value)}
-                className="px-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-indigo-500 outline-none"
+                className="px-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#6B7C42] outline-none"
               >
                 <option value="">All priorities</option>
                 <option value="urgent">Urgent</option>
@@ -245,7 +245,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
               <select
                 value={filterAssignee}
                 onChange={(e) => setFilterAssignee(e.target.value)}
-                className="px-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-indigo-500 outline-none"
+                className="px-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#6B7C42] outline-none"
               >
                 <option value="">All assignees</option>
                 <option value="unassigned">Unassigned</option>
@@ -256,7 +256,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-indigo-500 outline-none"
+                className="px-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#6B7C42] outline-none"
               >
                 <option value="">All statuses</option>
                 <option value="incomplete">Incomplete</option>
@@ -265,7 +265,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
               <select
                 value={filterTrackingStatus}
                 onChange={(e) => setFilterTrackingStatus(e.target.value)}
-                className="px-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-indigo-500 outline-none"
+                className="px-2 py-1 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#6B7C42] outline-none"
               >
                 <option value="">All tracking</option>
                 <option value="on_track">On Track</option>

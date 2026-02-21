@@ -168,7 +168,7 @@ export function TaskCard({ task, onClick }: Props) {
               {assigneeList.slice(0, 3).map((a) => (
                 <div
                   key={a.id}
-                  className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium ring-2 ring-white"
+                  className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium ring-2 ring-white"
                   title={a.name}
                 >
                   {a.name[0].toUpperCase()}

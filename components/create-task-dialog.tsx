@@ -93,7 +93,7 @@ export function CreateTaskDialog({
             <input
               name="title"
               required
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
               placeholder="Task title"
               autoFocus
             />
@@ -106,7 +106,7 @@ export function CreateTaskDialog({
             <textarea
               name="description"
               rows={3}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm resize-none"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm resize-none"
               placeholder="Add details..."
             />
           </div>
@@ -119,7 +119,7 @@ export function CreateTaskDialog({
               <select
                 name="sectionId"
                 defaultValue={sectionId}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
               >
                 {sections.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -135,7 +135,7 @@ export function CreateTaskDialog({
               <button
                 type="button"
                 onClick={() => setShowAssigneeDropdown(!showAssigneeDropdown)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm text-left flex items-center justify-between"
+                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm text-left flex items-center justify-between"
               >
                 <span className={selectedAssignees.length === 0 ? "text-gray-400" : "text-gray-900"}>
                   {selectedAssignees.length === 0
@@ -155,7 +155,7 @@ export function CreateTaskDialog({
                       value={assigneeSearch}
                       onChange={(e) => setAssigneeSearch(e.target.value)}
                       placeholder="Name or email"
-                      className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-indigo-500 outline-none"
+                      className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-[#6B7C42] outline-none"
                       autoFocus
                     />
                   </div>
@@ -169,7 +169,7 @@ export function CreateTaskDialog({
                           onClick={() => toggleAssignee(m.id)}
                           className="flex items-center gap-3 w-full px-3 py-2 hover:bg-gray-50 transition"
                         >
-                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium shrink-0">
+                          <div className="w-7 h-7 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium shrink-0">
                             {m.name[0].toUpperCase()}
                           </div>
                           <div className="flex-1 text-left min-w-0">
@@ -177,7 +177,7 @@ export function CreateTaskDialog({
                             <p className="text-xs text-gray-400 truncate">{m.email}</p>
                           </div>
                           {isSelected && (
-                            <Check className="w-4 h-4 text-indigo-500 shrink-0" />
+                            <Check className="w-4 h-4 text-[#6B7C42] shrink-0" />
                           )}
                         </button>
                       );
@@ -195,7 +195,7 @@ export function CreateTaskDialog({
                           return member ? (
                             <span
                               key={id}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-full"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-[#EEF0E0] text-[#4A5628] rounded-full"
                             >
                               {member.name.split(" ")[0]}
                               <button
@@ -204,7 +204,7 @@ export function CreateTaskDialog({
                                   e.stopPropagation();
                                   toggleAssignee(id);
                                 }}
-                                className="hover:text-indigo-900"
+                                className="hover:text-black"
                               >
                                 <X className="w-3 h-3" />
                               </button>
@@ -227,7 +227,7 @@ export function CreateTaskDialog({
               <select
                 name="priority"
                 defaultValue="medium"
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -242,7 +242,7 @@ export function CreateTaskDialog({
               <select
                 name="trackingStatus"
                 defaultValue="on_track"
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
               >
                 <option value="on_track">On Track</option>
                 <option value="at_risk">At Risk</option>
@@ -259,7 +259,7 @@ export function CreateTaskDialog({
               <input
                 name="startDate"
                 type="date"
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
               />
             </div>
             <div>
@@ -269,7 +269,7 @@ export function CreateTaskDialog({
               <input
                 name="dueDate"
                 type="date"
-                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+                className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
               />
             </div>
           </div>
@@ -285,7 +285,7 @@ export function CreateTaskDialog({
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 py-2 text-sm font-medium text-white bg-black rounded-xl hover:bg-gray-800 transition disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create Task"}
             </button>

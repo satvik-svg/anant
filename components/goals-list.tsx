@@ -92,7 +92,7 @@ export function GoalsList({ goals: initialGoals }: { goals: Goal[] }) {
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setShowCreate(true)}
-          className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg hover:from-indigo-600 hover:to-purple-700 transition"
+          className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 transition"
         >
           <Plus className="w-4 h-4" />
           New Goal
@@ -114,7 +114,7 @@ export function GoalsList({ goals: initialGoals }: { goals: Goal[] }) {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Goal title"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#6B7C42] outline-none"
                 autoFocus
               />
               <textarea
@@ -122,19 +122,19 @@ export function GoalsList({ goals: initialGoals }: { goals: Goal[] }) {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Description (optional)"
                 rows={2}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#6B7C42] outline-none resize-none"
               />
               <input
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#6B7C42] outline-none"
               />
               <div className="flex gap-2 pt-2">
                 <button
                   onClick={handleCreate}
                   disabled={!title.trim() || isPending}
-                  className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 disabled:opacity-50"
                 >
                   Create Goal
                 </button>
@@ -157,7 +157,7 @@ export function GoalsList({ goals: initialGoals }: { goals: Goal[] }) {
           <p className="text-gray-500 mb-4">No goals yet. Set your first objective!</p>
           <button
             onClick={() => setShowCreate(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"
           >
             <Plus className="w-4 h-4" />
             Create Goal
@@ -171,13 +171,13 @@ export function GoalsList({ goals: initialGoals }: { goals: Goal[] }) {
               <div key={goal.id} className="bg-white rounded-xl border border-gray-200 p-5 group">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-[#EEF0E0] flex items-center justify-center">
                       {goal.status === "completed" ? (
                         <CheckCircle2 className="w-5 h-5 text-green-500" />
                       ) : goal.status === "off_track" ? (
                         <AlertTriangle className="w-5 h-5 text-red-500" />
                       ) : (
-                        <Target className="w-5 h-5 text-indigo-500" />
+                        <Target className="w-5 h-5 text-[#6B7C42]" />
                       )}
                     </div>
                     <div>
@@ -215,7 +215,7 @@ export function GoalsList({ goals: initialGoals }: { goals: Goal[] }) {
                     max="100"
                     value={goal.progress}
                     onChange={(e) => handleUpdateProgress(goal.id, parseInt(e.target.value))}
-                    className="w-full mt-1 accent-indigo-500"
+                    className="w-full mt-1 accent-[#6B7C42]"
                   />
                 </div>
 
@@ -239,7 +239,7 @@ export function GoalsList({ goals: initialGoals }: { goals: Goal[] }) {
                     )}
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium">
+                    <div className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium">
                       {goal.owner.name[0].toUpperCase()}
                     </div>
                     <span className="text-xs text-gray-500">{goal.owner.name}</span>

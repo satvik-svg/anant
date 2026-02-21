@@ -136,7 +136,7 @@ function TaskRow({
       <div className="flex-1 min-w-0">
         <Link
           href={`/dashboard/projects/${task.project.id}`}
-          className={`text-sm font-medium hover:text-indigo-600 transition ${
+          className={`text-sm font-medium hover:text-[#4A5628] transition ${
             task.completed ? "line-through text-gray-400" : "text-gray-900"
           }`}
         >

@@ -36,7 +36,7 @@ export function CreateProjectDialog({ teams }: Props) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#4A5628] bg-[#EEF0E0] rounded-lg hover:bg-[#E4E8CC] transition"
       >
         <Plus className="w-4 h-4" />
         New Project
@@ -65,7 +65,7 @@ export function CreateProjectDialog({ teams }: Props) {
             <input
               name="name"
               required
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
               placeholder="e.g., Website Redesign"
               autoFocus
             />
@@ -78,7 +78,7 @@ export function CreateProjectDialog({ teams }: Props) {
             <textarea
               name="description"
               rows={2}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm resize-none"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm resize-none"
               placeholder="What's this project about?"
             />
           </div>
@@ -90,7 +90,7 @@ export function CreateProjectDialog({ teams }: Props) {
             <select
               name="teamId"
               required
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-sm"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none text-sm"
             >
               {teams.map((team) => (
                 <option key={team.id} value={team.id}>
@@ -111,7 +111,7 @@ export function CreateProjectDialog({ teams }: Props) {
                   type="button"
                   onClick={() => setSelectedColor(color)}
                   className={`w-8 h-8 rounded-lg transition ring-2 ring-offset-2 ${
-                    selectedColor === color ? "ring-indigo-500" : "ring-transparent"
+                    selectedColor === color ? "ring-[#6B7C42]" : "ring-transparent"
                   }`}
                   style={{ backgroundColor: color }}
                 />
@@ -130,7 +130,7 @@ export function CreateProjectDialog({ teams }: Props) {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 py-2 text-sm font-medium text-white bg-black rounded-xl hover:bg-gray-800 transition disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create"}
             </button>

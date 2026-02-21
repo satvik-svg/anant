@@ -80,7 +80,7 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
               <div className="flex items-center gap-2">
                 <div
                   className={`w-2.5 h-2.5 rounded-full ${
-                    SECTION_COLORS[section.name] || "bg-indigo-500"
+                    SECTION_COLORS[section.name] || "bg-[#EEF0E0]0"
                   }`}
                 />
                 <h3 className="text-sm font-semibold text-gray-700">
@@ -107,7 +107,7 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   className={`flex-1 px-3 pb-3 space-y-2 overflow-y-auto min-h-[100px] transition ${
-                    snapshot.isDraggingOver ? "bg-indigo-50/50 rounded-lg" : ""
+                    snapshot.isDraggingOver ? "bg-[#EEF0E0]/50 rounded-lg" : ""
                   }`}
                 >
                   {section.tasks.map((task, index) => (
@@ -152,7 +152,7 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
                 value={newSectionName}
                 onChange={(e) => setNewSectionName(e.target.value)}
                 placeholder="Section name"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#6B7C42] focus:border-transparent outline-none"
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleAddSection();
@@ -162,7 +162,7 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
               <div className="flex gap-2 mt-2">
                 <button
                   onClick={handleAddSection}
-                  className="px-3 py-1.5 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600"
+                  className="px-3 py-1.5 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800"
                 >
                   Add
                 </button>

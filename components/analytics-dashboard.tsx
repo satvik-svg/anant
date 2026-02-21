@@ -65,8 +65,8 @@ export function AnalyticsDashboard({ data }: { data: AnalyticsData }) {
         />
         <StatCard
           icon={TrendingUp}
-          iconColor="text-indigo-600"
-          iconBg="bg-indigo-50"
+          iconColor="text-[#4A5628]"
+          iconBg="bg-[#EEF0E0]"
           label="Completion Rate"
           value={`${data.completionRate}%`}
           trend={data.completionRate >= 50 ? "up" : "down"}
@@ -93,7 +93,7 @@ export function AnalyticsDashboard({ data }: { data: AnalyticsData }) {
                 <span className="text-xs text-gray-500 font-medium">{value}</span>
                 <div className="w-full bg-gray-100 rounded-t-md relative" style={{ height: "120px" }}>
                   <div
-                    className="absolute bottom-0 w-full bg-gradient-to-t from-indigo-500 to-indigo-400 rounded-t-md transition-all"
+                    className="absolute bottom-0 w-full bg-[#6B7C42] rounded-t-md transition-all"
                     style={{ height: `${(value / maxDayValue) * 100}%`, minHeight: value > 0 ? "4px" : "0" }}
                   />
                 </div>
