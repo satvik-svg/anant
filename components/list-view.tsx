@@ -86,7 +86,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
   }
 
   return (
-    <div className="p-6 max-w-5xl">
+    <div className="p-3 md:p-6 max-w-5xl">
       {sections.map((section) => {
         const isCollapsed = collapsedSections.has(section.id);
         return (
@@ -109,7 +109,8 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
 
             {/* Tasks table */}
             {!isCollapsed && (
-              <div className="bg-[#212121] rounded-xl border border-[#2e2e2e] overflow-hidden">
+              <div className="overflow-x-auto -mx-0">
+              <div className="bg-[#212121] rounded-xl border border-[#2e2e2e] overflow-hidden min-w-[560px]">
                 {/* Header */}
                 <div className="grid grid-cols-12 gap-4 px-4 py-2 bg-[#1a1a1a] border-b border-[#262626] text-xs font-medium text-[#737373] uppercase tracking-wider">
                   <div className="col-span-4">Task</div>
@@ -277,6 +278,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                     );
                   })
                 )}
+              </div>
               </div>
             )}
           </div>

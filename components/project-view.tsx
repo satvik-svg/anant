@@ -112,54 +112,29 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
   return (
     <div className="h-full flex flex-col">
       {/* Project Header */}
-      <div className="bg-[#1a1a1a] border-b border-[#262626] px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <div className="bg-[#1a1a1a] border-b border-[#262626] px-4 py-3 md:px-6 md:py-4">
+        {/* Row 1: project identity + add task */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
+              className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center text-white font-bold text-sm"
               style={{ backgroundColor: project.color }}
             >
               {project.name[0].toUpperCase()}
             </div>
-            <div>
-              <h1 className="text-lg font-semibold text-[#f5f5f5]">
+            <div className="min-w-0">
+              <h1 className="text-base md:text-lg font-semibold text-[#f5f5f5] truncate leading-tight">
                 {project.name}
               </h1>
               {project.description && (
-                <p className="text-sm text-[#a3a3a3]">{project.description}</p>
+                <p className="text-xs md:text-sm text-[#a3a3a3] truncate hidden sm:block">{project.description}</p>
               )}
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* View toggle */}
-            <div className="flex items-center bg-[#2a2a2a] rounded-lg p-0.5">
-              <button
-                onClick={() => setView("board")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${
-                  view === "board"
-                    ? "bg-[#3a3a3a] text-[#f5f5f5] shadow-sm"
-                    : "text-[#737373] hover:text-[#d4d4d4]"
-                }`}
-              >
-                <LayoutGrid className="w-4 h-4" />
-                Board
-              </button>
-              <button
-                onClick={() => setView("list")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${
-                  view === "list"
-                    ? "bg-[#3a3a3a] text-[#f5f5f5] shadow-sm"
-                    : "text-[#737373] hover:text-[#d4d4d4]"
-                }`}
-              >
-                <List className="w-4 h-4" />
-                List
-              </button>
-            </div>
-
-            {/* Members indicator */}
-            <div className="flex -space-x-2 ml-2">
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {/* Members indicator — hidden on very small screens */}
+            <div className="hidden sm:flex -space-x-2">
               {teamMembers.slice(0, 3).map((m) => (
                 <div
                   key={m.id}
@@ -176,14 +151,14 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
               )}
             </div>
 
-            {/* Invite button */}
+            {/* Invite button — icon-only on mobile */}
             <button
               onClick={() => setShowInviteDialog(true)}
-              className="ml-1 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#9aad6f] bg-[#1f2414] rounded-lg hover:bg-[#2a3018] transition"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium text-[#9aad6f] bg-[#1f2414] rounded-lg hover:bg-[#2a3018] transition"
               title="Invite people"
             >
               <UserPlus className="w-4 h-4" />
-              Invite
+              <span className="hidden sm:inline">Invite</span>
             </button>
 
             {/* Add task */}
@@ -192,19 +167,47 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
                 setDefaultSectionId(project.sections[0]?.id || null);
                 setShowCreateTask(true);
               }}
-              className="ml-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-[#6B7A45] rounded-lg hover:bg-[#5a6838] transition"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium text-white bg-[#6B7A45] rounded-lg hover:bg-[#5a6838] transition"
             >
               <Plus className="w-4 h-4" />
-              Add Task
+              <span className="hidden sm:inline">Add Task</span>
             </button>
           </div>
         </div>
 
-        {/* Filter bar */}
-        <div className="flex items-center gap-2 mt-3">
+        {/* Row 2: view toggle + filter */}
+        <div className="flex items-center gap-2 mt-2.5">
+          {/* View toggle */}
+          <div className="flex items-center bg-[#2a2a2a] rounded-lg p-0.5 flex-shrink-0">
+            <button
+              onClick={() => setView("board")}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-sm font-medium transition ${
+                view === "board"
+                  ? "bg-[#3a3a3a] text-[#f5f5f5] shadow-sm"
+                  : "text-[#737373] hover:text-[#d4d4d4]"
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span className="hidden sm:inline">Board</span>
+            </button>
+            <button
+              onClick={() => setView("list")}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-sm font-medium transition ${
+                view === "list"
+                  ? "bg-[#3a3a3a] text-[#f5f5f5] shadow-sm"
+                  : "text-[#737373] hover:text-[#d4d4d4]"
+              }`}
+            >
+              <List className="w-4 h-4" />
+              <span className="hidden sm:inline">List</span>
+            </button>
+          </div>
+
+          {/* Filter bar — scrolls horizontally on mobile */}
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none flex-1">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg border transition ${
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg border transition flex-shrink-0 ${
               hasActiveFilters
                 ? "border-[#B8C87A] bg-[#EEF0E0] text-[#4A5628]"
                 : "border-[#2e2e2e] text-[#737373] hover:text-[#d4d4d4] hover:bg-[#1f1f1f]"
@@ -231,19 +234,19 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
 
           {showFilters && (
             <>
-              <div className="relative">
+              <div className="relative flex-shrink-0">
                 <Search className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-[#525252]" />
                 <input
                   value={filterSearch}
                   onChange={(e) => setFilterSearch(e.target.value)}
                   placeholder="Search tasks..."
-                  className="pl-7 pr-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] placeholder:text-[#525252] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none w-40"
+                  className="pl-7 pr-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] placeholder:text-[#525252] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none w-36"
                 />
               </div>
               <select
                 value={filterPriority}
                 onChange={(e) => setFilterPriority(e.target.value)}
-                className="px-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none"
+                className="px-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none flex-shrink-0"
               >
                 <option value="">All priorities</option>
                 <option value="urgent">Urgent</option>
@@ -254,7 +257,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
               <select
                 value={filterAssignee}
                 onChange={(e) => setFilterAssignee(e.target.value)}
-                className="px-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none"
+                className="px-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none flex-shrink-0"
               >
                 <option value="">All assignees</option>
                 <option value="unassigned">Unassigned</option>
@@ -265,7 +268,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none"
+                className="px-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none flex-shrink-0"
               >
                 <option value="">All statuses</option>
                 <option value="incomplete">Incomplete</option>
@@ -274,7 +277,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
               <select
                 value={filterTrackingStatus}
                 onChange={(e) => setFilterTrackingStatus(e.target.value)}
-                className="px-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none"
+                className="px-2 py-1 text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none flex-shrink-0"
               >
                 <option value="">All tracking</option>
                 <option value="on_track">On Track</option>
@@ -283,7 +286,8 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
               </select>
             </>
           )}
-        </div>
+          </div>{/* end scrollable filter row */}
+        </div>{/* end row 2 */}
       </div>
 
       {/* Content */}
