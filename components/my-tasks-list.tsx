@@ -31,10 +31,10 @@ interface Props {
 }
 
 const PRIORITY_COLORS: Record<string, string> = {
-  urgent: "text-red-500 bg-red-50",
-  high: "text-orange-500 bg-orange-50",
-  medium: "text-yellow-600 bg-yellow-50",
-  low: "text-blue-500 bg-blue-50",
+  urgent: "text-red-400 bg-red-950/40",
+  high: "text-orange-400 bg-orange-950/40",
+  medium: "text-yellow-400 bg-yellow-950/40",
+  low: "text-blue-400 bg-blue-950/40",
 };
 
 export function MyTasksList({ tasks }: Props) {
@@ -48,9 +48,9 @@ export function MyTasksList({ tasks }: Props) {
 
   if (tasks.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-        <CheckCircle2 className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-        <p className="text-gray-500">No tasks assigned to you. Enjoy the free time!</p>
+      <div className="bg-[#212121] rounded-xl border border-[#2e2e2e] p-12 text-center">
+        <CheckCircle2 className="w-10 h-10 text-[#525252] mx-auto mb-3" />
+        <p className="text-[#737373]">No tasks assigned to you. Enjoy the free time!</p>
       </div>
     );
   }
@@ -61,18 +61,18 @@ export function MyTasksList({ tasks }: Props) {
   return (
     <div className="space-y-6">
       {/* Incomplete tasks */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="px-4 py-3 border-b border-gray-100 bg-gray-50">
-          <h2 className="text-sm font-semibold text-gray-700">
+      <div className="bg-[#212121] rounded-xl border border-[#2e2e2e] overflow-hidden">
+        <div className="px-4 py-3 border-b border-[#262626] bg-[#1a1a1a]">
+          <h2 className="text-sm font-semibold text-[#a3a3a3]">
             To complete ({incomplete.length})
           </h2>
         </div>
         {incomplete.length === 0 ? (
-          <div className="p-6 text-center text-sm text-gray-400">
+          <div className="p-6 text-center text-sm text-[#525252]">
             All caught up!
           </div>
         ) : (
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-[#262626]">
             {incomplete.map((task) => (
               <TaskRow
                 key={task.id}
@@ -86,13 +86,13 @@ export function MyTasksList({ tasks }: Props) {
 
       {/* Completed tasks */}
       {completed.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="px-4 py-3 border-b border-gray-100 bg-gray-50">
-            <h2 className="text-sm font-semibold text-gray-700">
+        <div className="bg-[#212121] rounded-xl border border-[#2e2e2e] overflow-hidden">
+          <div className="px-4 py-3 border-b border-[#262626] bg-[#1a1a1a]">
+            <h2 className="text-sm font-semibold text-[#a3a3a3]">
               Completed ({completed.length})
             </h2>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-[#262626]">
             {completed.map((task) => (
               <TaskRow
                 key={task.id}
@@ -119,11 +119,11 @@ function TaskRow({
   const isOverdue = dueDate && isPast(dueDate) && !isToday(dueDate) && !task.completed;
 
   return (
-    <div className="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 transition">
+    <div className="flex items-center gap-4 px-4 py-3 hover:bg-[#1f1f1f] transition">
       <button
         onClick={() => onToggle(task.completed)}
         className={`shrink-0 ${
-          task.completed ? "text-green-500" : "text-gray-300 hover:text-gray-400"
+          task.completed ? "text-green-400" : "text-[#525252] hover:text-[#a3a3a3]"
         }`}
       >
         {task.completed ? (
@@ -136,8 +136,8 @@ function TaskRow({
       <div className="flex-1 min-w-0">
         <Link
           href={`/dashboard/projects/${task.project.id}`}
-          className={`text-sm font-medium hover:text-[#4A5628] transition ${
-            task.completed ? "line-through text-gray-400" : "text-gray-900"
+          className={`text-sm font-medium hover:text-[#8a9a5b] transition ${
+            task.completed ? "line-through text-[#525252]" : "text-[#f5f5f5]"
           }`}
         >
           {task.title}
@@ -147,7 +147,7 @@ function TaskRow({
             className="w-2 h-2 rounded-sm shrink-0"
             style={{ backgroundColor: task.project.color }}
           />
-          <span className="text-xs text-gray-400 truncate">
+          <span className="text-xs text-[#737373] truncate">
             {task.project.name} · {task.section.name}
           </span>
         </div>
@@ -157,7 +157,7 @@ function TaskRow({
         {hasDueDate && (
           <span
             className={`flex items-center gap-1 text-xs ${
-              isOverdue ? "text-red-500" : "text-gray-400"
+              isOverdue ? "text-red-400" : "text-[#737373]"
             }`}
           >
             <Calendar className="w-3 h-3" />
@@ -170,13 +170,13 @@ function TaskRow({
         )}
         <span
           className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize ${
-            PRIORITY_COLORS[task.priority] || "text-gray-500 bg-gray-50"
+            PRIORITY_COLORS[task.priority] || "text-[#737373] bg-[#2a2a2a]"
           }`}
         >
           {task.priority}
         </span>
         {task._count.comments > 0 && (
-          <span className="flex items-center gap-1 text-xs text-gray-400">
+          <span className="flex items-center gap-1 text-xs text-[#737373]">
             <MessageSquare className="w-3 h-3" />
             {task._count.comments}
           </span>

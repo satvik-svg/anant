@@ -48,10 +48,10 @@ interface Props {
 }
 
 const PRIORITY_COLORS: Record<string, string> = {
-  urgent: "text-red-500 bg-red-50",
-  high: "text-orange-500 bg-orange-50",
-  medium: "text-yellow-600 bg-yellow-50",
-  low: "text-blue-500 bg-blue-50",
+  urgent: "text-red-400 bg-red-950/40",
+  high: "text-orange-400 bg-orange-950/40",
+  medium: "text-yellow-400 bg-yellow-950/40",
+  low: "text-blue-400 bg-blue-950/40",
 };
 
 const SECTION_COLORS: Record<string, string> = {
@@ -61,9 +61,9 @@ const SECTION_COLORS: Record<string, string> = {
 };
 
 const TRACKING_STATUS_STYLES: Record<string, { label: string; bg: string; text: string }> = {
-  on_track: { label: "On Track", bg: "bg-green-50", text: "text-green-700" },
-  at_risk: { label: "At Risk", bg: "bg-yellow-50", text: "text-yellow-700" },
-  off_track: { label: "Off Track", bg: "bg-red-50", text: "text-red-700" },
+  on_track: { label: "On Track", bg: "bg-green-950/40", text: "text-green-400" },
+  at_risk: { label: "At Risk", bg: "bg-yellow-950/40", text: "text-yellow-400" },
+  off_track: { label: "Off Track", bg: "bg-red-950/40", text: "text-red-400" },
 };
 
 export function ListView({ sections, projectId, teamMembers, onTaskClick }: Props) {
@@ -97,21 +97,21 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
               className="flex items-center gap-2 mb-2 group"
             >
               {isCollapsed ? (
-                <ChevronRight className="w-4 h-4 text-gray-400" />
+                <ChevronRight className="w-4 h-4 text-[#525252]" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-gray-400" />
+                <ChevronDown className="w-4 h-4 text-[#525252]" />
               )}
-              <h3 className="text-sm font-semibold text-gray-700">{section.name}</h3>
-              <span className="text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">
+              <h3 className="text-sm font-semibold text-[#d4d4d4]">{section.name}</h3>
+              <span className="text-xs text-[#525252] bg-[#2a2a2a] px-1.5 py-0.5 rounded-full">
                 {section.tasks.length}
               </span>
             </button>
 
             {/* Tasks table */}
             {!isCollapsed && (
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="bg-[#212121] rounded-xl border border-[#2e2e2e] overflow-hidden">
                 {/* Header */}
-                <div className="grid grid-cols-12 gap-4 px-4 py-2 bg-gray-50 border-b border-gray-100 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <div className="grid grid-cols-12 gap-4 px-4 py-2 bg-[#1a1a1a] border-b border-[#262626] text-xs font-medium text-[#737373] uppercase tracking-wider">
                   <div className="col-span-4">Task</div>
                   <div className="col-span-2">Assignee</div>
                   <div className="col-span-2">Dates</div>
@@ -122,7 +122,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
 
                 {/* Rows */}
                 {section.tasks.length === 0 ? (
-                  <div className="px-4 py-8 text-center text-sm text-gray-400">
+                  <div className="px-4 py-8 text-center text-sm text-[#525252]">
                     No tasks in this section
                   </div>
                 ) : (
@@ -135,7 +135,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                       <div
                         key={task.id}
                         onClick={() => onTaskClick(task.id)}
-                        className={`grid grid-cols-12 gap-4 px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 cursor-pointer transition border-l-2 ${
+                        className={`grid grid-cols-12 gap-4 px-4 py-3 border-b border-[#262626] last:border-0 hover:bg-[#1f1f1f] cursor-pointer transition border-l-2 ${
                           SECTION_COLORS[section.name] || "border-l-[#6B7C42]"
                         }`}
                       >
@@ -147,7 +147,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                               toggleComplete(task.id, task.completed);
                             }}
                             className={`shrink-0 ${
-                              task.completed ? "text-green-500" : "text-gray-300 hover:text-gray-400"
+                              task.completed ? "text-green-500" : "text-[#444444] hover:text-[#737373]"
                             }`}
                           >
                             {task.completed ? (
@@ -158,9 +158,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                           </button>
                           <span
                             className={`text-sm truncate ${
-                              task.completed
-                                ? "line-through text-gray-400"
-                                : "text-gray-900"
+                              task.completed ? "line-through text-[#525252]" : "text-[#f5f5f5]"
                             }`}
                           >
                             {task.title}
@@ -175,27 +173,27 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                               : task.assignee
                               ? [task.assignee]
                               : [];
-                            if (assigneeList.length === 0) return <span className="text-sm text-gray-300">Unassigned</span>;
+                            if (assigneeList.length === 0) return <span className="text-sm text-[#444444]">Unassigned</span>;
                             return (
                               <div className="flex items-center gap-1.5">
                                 <div className="flex -space-x-1.5">
                                   {assigneeList.slice(0, 2).map((a) => (
                                     <div
                                       key={a.id}
-                                      className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium ring-2 ring-white"
+                                      className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium ring-2 ring-[#212121]"
                                       title={a.name}
                                     >
                                       {a.name[0].toUpperCase()}
                                     </div>
                                   ))}
                                   {assigneeList.length > 2 && (
-                                    <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-medium text-gray-600 ring-2 ring-white">
+                                    <div className="w-6 h-6 rounded-full bg-[#2a2a2a] flex items-center justify-center text-[10px] font-medium text-[#737373] ring-2 ring-[#212121]">
                                       +{assigneeList.length - 2}
                                     </div>
                                   )}
                                 </div>
                                 {assigneeList.length === 1 && (
-                                  <span className="text-sm text-gray-600 truncate">
+                                  <span className="text-sm text-[#a3a3a3] truncate">
                                     {assigneeList[0].name.split(" ")[0]}
                                   </span>
                                 )}
@@ -213,7 +211,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                                   ? "text-red-500"
                                   : isDueToday
                                   ? "text-orange-500"
-                                  : "text-gray-500"
+                                  : "text-[#737373]"
                               }`}
                             >
                               <Calendar className="w-3.5 h-3.5" />
@@ -228,7 +226,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                               )}
                             </span>
                           ) : (
-                            <span className="text-sm text-gray-300">No date</span>
+                            <span className="text-sm text-[#444444]">No date</span>
                           )}
                         </div>
 
@@ -236,7 +234,7 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                         <div className="col-span-1 flex items-center">
                           <span
                             className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize ${
-                              PRIORITY_COLORS[task.priority] || "text-gray-500 bg-gray-50"
+                              PRIORITY_COLORS[task.priority] || "text-[#737373] bg-[#2a2a2a]"
                             }`}
                           >
                             {task.priority}
@@ -256,20 +254,20 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                               {TRACKING_STATUS_STYLES[task.trackingStatus].label}
                             </span>
                           ) : (
-                            <span className="text-xs text-gray-300">—</span>
+                            <span className="text-xs text-[#444444]">—</span>
                           )}
                         </div>
 
                         {/* Activity */}
                         <div className="col-span-2 flex items-center justify-end gap-3">
                           {task._count.comments > 0 && (
-                            <span className="flex items-center gap-1 text-xs text-gray-400">
+                            <span className="flex items-center gap-1 text-xs text-[#525252]">
                               <MessageSquare className="w-3 h-3" />
                               {task._count.comments}
                             </span>
                           )}
                           {task._count.attachments > 0 && (
-                            <span className="flex items-center gap-1 text-xs text-gray-400">
+                            <span className="flex items-center gap-1 text-xs text-[#525252]">
                               <Paperclip className="w-3 h-3" />
                               {task._count.attachments}
                             </span>

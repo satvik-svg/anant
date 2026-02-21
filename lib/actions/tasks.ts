@@ -437,7 +437,24 @@ export async function updateTaskAssignees(taskId: string, userIds: string[]) {
   return { success: true };
 }
 
-export async function getMyTasks() {
+export type MyTaskItem = {
+  id: string;
+  title: string;
+  priority: string;
+  dueDate: Date | null;
+  completed: boolean;
+  project: { id: string; name: string; color: string };
+};
+
+export type MyTasksResult = {
+  upcoming: MyTaskItem[];
+  overdue: MyTaskItem[];
+  completed: MyTaskItem[];
+  completedThisWeek: MyTaskItem[];
+  total: number;
+};
+
+export async function getMyTasks(): Promise<MyTasksResult> {
   const userId = await getCurrentUserId();
   const now = new Date();
   const startOfWeek = new Date(now);
@@ -447,7 +464,7 @@ export async function getMyTasks() {
   endOfWeek.setDate(startOfWeek.getDate() + 6);
   endOfWeek.setHours(23, 59, 59, 999);
 
-  const tasks = await prisma.task.findMany({
+  const raw = await prisma.task.findMany({
     where: {
       OR: [
         { creatorId: userId },
@@ -457,21 +474,36 @@ export async function getMyTasks() {
     },
     include: {
       project: { select: { id: true, name: true, color: true } },
-      assignees: { include: { user: { select: { id: true, name: true, avatar: true } } } },
     },
     orderBy: { createdAt: "desc" },
   });
+
+  const tasks: MyTaskItem[] = raw.map((t) => ({
+    id: t.id,
+    title: t.title,
+    priority: t.priority,
+    dueDate: t.dueDate,
+    completed: t.completed,
+    project: { id: t.project.id, name: t.project.name, color: t.project.color },
+  }));
 
   const upcoming = tasks.filter(
     (t) => !t.completed && (!t.dueDate || t.dueDate >= now)
   );
   const overdue = tasks.filter(
-    (t) => !t.completed && t.dueDate && t.dueDate < now
+    (t) => !t.completed && t.dueDate !== null && t.dueDate < now
   );
   const completed = tasks.filter((t) => t.completed);
-  const completedThisWeek = tasks.filter(
-    (t) => t.completed && t.updatedAt >= startOfWeek && t.updatedAt <= endOfWeek
-  );
+  const completedThisWeek = raw
+    .filter((t) => t.completed && t.updatedAt >= startOfWeek && t.updatedAt <= endOfWeek)
+    .map((t): MyTaskItem => ({
+      id: t.id,
+      title: t.title,
+      priority: t.priority,
+      dueDate: t.dueDate,
+      completed: t.completed,
+      project: { id: t.project.id, name: t.project.name, color: t.project.color },
+    }));
 
   return { upcoming, overdue, completed, completedThisWeek, total: tasks.length };
 }

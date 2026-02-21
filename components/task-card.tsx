@@ -41,9 +41,9 @@ const PRIORITY_STYLES: Record<string, { color: string; icon: typeof AlertCircle 
 };
 
 const TRACKING_STATUS_STYLES: Record<string, { label: string; bg: string; text: string }> = {
-  on_track: { label: "On Track", bg: "bg-green-50", text: "text-green-700" },
-  at_risk: { label: "At Risk", bg: "bg-yellow-50", text: "text-yellow-700" },
-  off_track: { label: "Off Track", bg: "bg-red-50", text: "text-red-700" },
+  on_track: { label: "On Track", bg: "bg-green-950/40", text: "text-green-400" },
+  at_risk: { label: "At Risk", bg: "bg-yellow-950/40", text: "text-yellow-400" },
+  off_track: { label: "Off Track", bg: "bg-red-950/40", text: "text-red-400" },
 };
 
 export function TaskCard({ task, onClick }: Props) {
@@ -67,13 +67,13 @@ export function TaskCard({ task, onClick }: Props) {
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-lg border border-gray-200 p-3 cursor-pointer hover:shadow-md hover:border-gray-300 transition group"
+      className="bg-[#212121] rounded-lg border border-[#2e2e2e] p-3 cursor-pointer hover:shadow-xl hover:border-[#3a3a3a] transition group"
     >
       {/* Title */}
       <div className="flex items-start gap-2">
         <button
           onClick={handleToggleComplete}
-          className={`mt-0.5 shrink-0 ${optimisticCompleted ? "text-green-500" : "text-gray-300 hover:text-gray-400"}`}
+          className={`mt-0.5 shrink-0 ${optimisticCompleted ? "text-green-500" : "text-[#444444] hover:text-[#737373]"}`}
         >
           {optimisticCompleted ? (
             <CheckCircle2 className="w-4 h-4" />
@@ -83,7 +83,7 @@ export function TaskCard({ task, onClick }: Props) {
         </button>
         <span
           className={`text-sm font-medium ${
-            optimisticCompleted ? "line-through text-gray-400" : "text-gray-900"
+            optimisticCompleted ? "line-through text-[#525252]" : "text-[#f5f5f5]"
           }`}
         >
           {task.title}
@@ -92,7 +92,7 @@ export function TaskCard({ task, onClick }: Props) {
 
       {/* Description preview */}
       {task.description && (
-        <p className="text-xs text-gray-400 mt-1.5 ml-6 line-clamp-2">
+        <p className="text-xs text-[#525252] mt-1.5 ml-6 line-clamp-2">
           {task.description}
         </p>
       )}
@@ -122,7 +122,7 @@ export function TaskCard({ task, onClick }: Props) {
                 ? "text-red-500"
                 : isDueToday
                 ? "text-orange-500"
-                : "text-gray-400"
+                : "text-[#525252]"
             }`}
           >
             <Calendar className="w-3 h-3" />
@@ -140,7 +140,7 @@ export function TaskCard({ task, onClick }: Props) {
 
         {/* Comment count */}
         {task._count.comments > 0 && (
-          <div className="flex items-center gap-1 text-xs text-gray-400">
+          <div className="flex items-center gap-1 text-xs text-[#525252]">
             <MessageSquare className="w-3 h-3" />
             {task._count.comments}
           </div>
@@ -148,7 +148,7 @@ export function TaskCard({ task, onClick }: Props) {
 
         {/* Attachment count */}
         {task._count.attachments > 0 && (
-          <div className="flex items-center gap-1 text-xs text-gray-400">
+          <div className="flex items-center gap-1 text-xs text-[#525252]">
             <Paperclip className="w-3 h-3" />
             {task._count.attachments}
           </div>
@@ -168,7 +168,7 @@ export function TaskCard({ task, onClick }: Props) {
               {assigneeList.slice(0, 3).map((a) => (
                 <div
                   key={a.id}
-                  className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium ring-2 ring-white"
+                  className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium ring-2 ring-[#212121]"
                   title={a.name}
                 >
                   {a.name[0].toUpperCase()}
@@ -176,7 +176,7 @@ export function TaskCard({ task, onClick }: Props) {
               ))}
               {assigneeList.length > 3 && (
                 <div
-                  className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-[10px] font-medium text-gray-600 ring-2 ring-white"
+                  className="w-6 h-6 rounded-full bg-[#2a2a2a] flex items-center justify-center text-[10px] font-medium text-[#737373] ring-2 ring-[#212121]"
                 >
                   +{assigneeList.length - 3}
                 </div>

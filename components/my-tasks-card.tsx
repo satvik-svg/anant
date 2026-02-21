@@ -3,15 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Calendar, Clock, ChevronRight } from "lucide-react";
+import type { MyTaskItem } from "@/lib/actions/tasks";
 
-type Task = {
-  id: string;
-  title: string;
-  priority: string;
-  dueDate: Date | null;
-  completed: boolean;
-  project: { id: string; name: string; color: string };
-};
+type Task = MyTaskItem;
 
 interface Props {
   upcoming: Task[];

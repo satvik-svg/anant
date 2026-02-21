@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getProjects } from "@/lib/actions/projects";
 import { getTeams } from "@/lib/actions/teams";
 import { getUnreadCount } from "@/lib/actions/notifications";
-import Sidebar from "@/components/sidebar";
+import { DashboardShell } from "@/components/dashboard-shell";
 
 export default async function DashboardLayout({
   children,
@@ -20,14 +20,13 @@ export default async function DashboardLayout({
   ]);
 
   return (
-    <div className="flex h-screen bg-[#1a1a1a] overflow-hidden">
-      <Sidebar
-        user={session.user!}
-        projects={projects}
-        teams={teams}
-        unreadCount={unreadCount}
-      />
-      <main className="flex-1 overflow-auto bg-[#1a1a1a]">{children}</main>
-    </div>
+    <DashboardShell
+      user={session.user!}
+      projects={projects}
+      teams={teams}
+      unreadCount={unreadCount}
+    >
+      {children}
+    </DashboardShell>
   );
 }

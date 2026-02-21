@@ -14,6 +14,7 @@ import {
   Target,
   Briefcase,
   BarChart3,
+  X,
 } from "lucide-react";
 import { useState } from "react";
 import { SearchDialog } from "./search-dialog";
@@ -35,9 +36,10 @@ interface SidebarProps {
     _count: { projects: number };
   }>;
   unreadCount?: number;
+  onClose?: () => void;
 }
 
-export default function Sidebar({ user, projects, teams, unreadCount = 0 }: SidebarProps) {
+export default function Sidebar({ user, projects, teams, unreadCount = 0, onClose }: SidebarProps) {
   const pathname = usePathname();
   const [projectsOpen, setProjectsOpen] = useState(true);
 
@@ -45,9 +47,19 @@ export default function Sidebar({ user, projects, teams, unreadCount = 0 }: Side
     <aside className="w-64 bg-[#141414] border-r border-[#262626] flex flex-col h-full shrink-0">
       {/* Logo */}
       <div className="px-5 py-4 border-b border-[#262626]">
-        <div className="flex items-center gap-2">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Logo" width={36} height={36} className="rounded-lg object-contain" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="Logo" width={36} height={36} className="rounded-lg object-contain" />
+          </div>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="md:hidden p-1.5 rounded-lg text-[#737373] hover:text-[#f5f5f5] hover:bg-[#2a2a2a] transition"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
 

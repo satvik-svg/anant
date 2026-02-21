@@ -10,10 +10,10 @@ export default async function NotesPage() {
   const notes = await getNotes();
 
   return (
-    <div className="p-8 max-w-5xl w-full">
+    <div className="p-4 sm:p-8 max-w-5xl w-full">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">My Notes</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-[#f5f5f5]">My Notes</h1>
+        <p className="text-[#a3a3a3] mt-1">
           Personal notes &mdash; only visible to you
         </p>
       </div>
