@@ -20,14 +20,14 @@ export default async function DashboardLayout({
   ]);
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-[#1a1a1a] overflow-hidden">
       <Sidebar
         user={session.user!}
         projects={projects}
         teams={teams}
         unreadCount={unreadCount}
       />
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="flex-1 overflow-auto bg-[#1a1a1a]">{children}</main>
     </div>
   );
 }

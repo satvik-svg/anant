@@ -436,3 +436,42 @@ export async function updateTaskAssignees(taskId: string, userIds: string[]) {
   revalidatePath("/dashboard/my-tasks");
   return { success: true };
 }
+
+export async function getMyTasks() {
+  const userId = await getCurrentUserId();
+  const now = new Date();
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+  endOfWeek.setHours(23, 59, 59, 999);
+
+  const tasks = await prisma.task.findMany({
+    where: {
+      OR: [
+        { creatorId: userId },
+        { assigneeId: userId },
+        { assignees: { some: { userId } } },
+      ],
+    },
+    include: {
+      project: { select: { id: true, name: true, color: true } },
+      assignees: { include: { user: { select: { id: true, name: true, avatar: true } } } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const upcoming = tasks.filter(
+    (t) => !t.completed && (!t.dueDate || t.dueDate >= now)
+  );
+  const overdue = tasks.filter(
+    (t) => !t.completed && t.dueDate && t.dueDate < now
+  );
+  const completed = tasks.filter((t) => t.completed);
+  const completedThisWeek = tasks.filter(
+    (t) => t.completed && t.updatedAt >= startOfWeek && t.updatedAt <= endOfWeek
+  );
+
+  return { upcoming, overdue, completed, completedThisWeek, total: tasks.length };
+}
