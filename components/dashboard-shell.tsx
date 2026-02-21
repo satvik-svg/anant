@@ -1,8 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Menu } from "lucide-react";
 import Sidebar from "./sidebar";
+
+// Minimal content-area skeleton used as Suspense fallback during page transitions
+function ContentSkeleton() {
+  return (
+    <div className="p-4 md:p-6 animate-pulse space-y-4">
+      <div className="h-6 w-48 bg-[#2a2a2a] rounded-lg" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-[#212121] border border-[#2e2e2e] rounded-xl p-4 space-y-3">
+            <div className="h-4 w-24 bg-[#2a2a2a] rounded" />
+            <div className="h-3 w-full bg-[#262626] rounded" />
+            <div className="h-3 w-3/4 bg-[#262626] rounded" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface Props {
   user: {
@@ -80,7 +98,9 @@ export function DashboardShell({
           />
         </div>
         <div className="flex-1 overflow-auto">
-          {children}
+          <Suspense fallback={<ContentSkeleton />}>
+            {children}
+          </Suspense>
         </div>
       </main>
     </div>
