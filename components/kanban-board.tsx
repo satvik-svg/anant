@@ -5,7 +5,7 @@ import { TaskCard } from "./task-card";
 import { moveTask } from "@/lib/actions/tasks";
 import { createSection } from "@/lib/actions/projects";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface Task {
   id: string;
@@ -47,17 +47,44 @@ const SECTION_COLORS: Record<string, string> = {
 };
 
 export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onAddTask }: Props) {
+  const [localSections, setLocalSections] = useState(sections);
   const [addingSection, setAddingSection] = useState(false);
   const [newSectionName, setNewSectionName] = useState("");
+  // Track in-flight drag mutations — while >0, ignore server prop updates so the
+  // optimistic state isn't overwritten by stale RSC re-renders (Redis still warm).
+  const mutatingRef = useRef(0);
+
+  // Sync from server when RSC re-renders deliver fresh data (only when idle)
+  useEffect(() => {
+    if (mutatingRef.current === 0) {
+      setLocalSections(sections);
+    }
+  }, [sections]);
 
   async function handleDragEnd(result: DropResult) {
     if (!result.destination) return;
 
-    const taskId = result.draggableId;
-    const newSectionId = result.destination.droppableId;
-    const newOrder = result.destination.index;
+    const { draggableId: taskId, source, destination } = result;
+    const newSectionId = destination.droppableId;
+    const newOrder = destination.index;
 
-    await moveTask(taskId, newSectionId, newOrder);
+    // Optimistic update: move the task in local state immediately
+    setLocalSections(prev => {
+      const next = prev.map(s => ({ ...s, tasks: [...s.tasks] }));
+      const srcSection = next.find(s => s.id === source.droppableId);
+      const dstSection = next.find(s => s.id === newSectionId);
+      if (!srcSection || !dstSection) return prev;
+      const [moved] = srcSection.tasks.splice(source.index, 1);
+      dstSection.tasks.splice(newOrder, 0, moved);
+      return next;
+    });
+
+    mutatingRef.current++;
+    try {
+      await moveTask(taskId, newSectionId, newOrder);
+    } finally {
+      mutatingRef.current--;
+    }
   }
 
   async function handleAddSection() {
@@ -70,7 +97,7 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="flex gap-4 p-6 h-full overflow-x-auto">
-        {sections.map((section) => (
+        {localSections.map((section) => (
           <div
             key={section.id}
             className="flex flex-col bg-[#212121] border border-[#2e2e2e] rounded-xl w-80 shrink-0"

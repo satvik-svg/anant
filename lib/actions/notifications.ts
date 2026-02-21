@@ -3,6 +3,8 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { redis, unreadCountCacheKey, invalidateUserCaches, UNREAD_CACHE_TTL } from "@/lib/redis";
+import { after } from "next/server";
 
 async function getCurrentUserId() {
   const session = await auth();
@@ -27,16 +29,26 @@ export async function getNotifications() {
 
 export async function getUnreadCount() {
   const userId = await getCurrentUserId();
-  return prisma.notification.count({
+  const cacheKey = unreadCountCacheKey(userId);
+
+  const cached = await redis.get<number>(cacheKey);
+  if (cached !== null) return cached;
+
+  const count = await prisma.notification.count({
     where: { userId, read: false },
   });
+
+  after(() => redis.setex(cacheKey, UNREAD_CACHE_TTL, count));
+  return count;
 }
 
 export async function markAsRead(notificationId: string) {
+  const userId = await getCurrentUserId();
   await prisma.notification.update({
     where: { id: notificationId },
     data: { read: true },
   });
+  after(() => invalidateUserCaches(unreadCountCacheKey(userId)));
   revalidatePath("/dashboard/inbox");
 }
 
@@ -46,6 +58,7 @@ export async function markAllAsRead() {
     where: { userId, read: false },
     data: { read: true },
   });
+  after(() => invalidateUserCaches(unreadCountCacheKey(userId)));
   revalidatePath("/dashboard/inbox");
 }
 

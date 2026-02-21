@@ -2,8 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { invalidateProjectCache } from "@/lib/redis";
 
 async function getCurrentUser() {
   const session = await auth();
@@ -51,8 +52,8 @@ export async function addComment(taskId: string, content: string) {
       await Promise.all(jobs);
     });
 
-    revalidateTag(`project-${task.projectId}`, "max");
-    revalidatePath(`/dashboard/projects/${task.projectId}`);
+    revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+    after(() => invalidateProjectCache(task.projectId));
   }
 
   return comment;
@@ -66,8 +67,8 @@ export async function deleteComment(commentId: string) {
   if (!comment) return;
 
   await prisma.comment.delete({ where: { id: commentId } });
-  revalidateTag(`project-${comment.task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${comment.task.projectId}`);
+  revalidatePath(`/dashboard/projects/${comment.task.projectId}`, "page");
+  after(() => invalidateProjectCache(comment.task.projectId));
 }
 
 export async function addAttachment(taskId: string, data: {
@@ -93,8 +94,8 @@ export async function addAttachment(taskId: string, data: {
         data: { action: "attachment_added", details: JSON.stringify({ filename: data.filename }), taskId, userId: user.id },
       })
     );
-    revalidateTag(`project-${task.projectId}`, "max");
-    revalidatePath(`/dashboard/projects/${task.projectId}`);
+    revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+    after(() => invalidateProjectCache(task.projectId));
   }
 
   return attachment;
@@ -108,6 +109,6 @@ export async function deleteAttachment(attachmentId: string) {
   if (!attachment) return;
 
   await prisma.attachment.delete({ where: { id: attachmentId } });
-  revalidateTag(`project-${attachment.task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${attachment.task.projectId}`);
+  revalidatePath(`/dashboard/projects/${attachment.task.projectId}`, "page");
+  after(() => invalidateProjectCache(attachment.task.projectId));
 }

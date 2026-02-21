@@ -2,7 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { invalidateProjectCache } from "@/lib/redis";
 
 async function getCurrentUserId() {
   const session = await auth();
@@ -44,8 +46,8 @@ export async function addTagToTask(taskId: string, tagId: string) {
 
   const task = await prisma.task.findUnique({ where: { id: taskId } });
   if (task) {
-    revalidateTag(`project-${task.projectId}`, "max");
-    revalidatePath(`/dashboard/projects/${task.projectId}`);
+    revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+    after(() => invalidateProjectCache(task.projectId));
   }
   return { success: true };
 }
@@ -57,8 +59,8 @@ export async function removeTagFromTask(taskId: string, tagId: string) {
 
   const task = await prisma.task.findUnique({ where: { id: taskId } });
   if (task) {
-    revalidateTag(`project-${task.projectId}`, "max");
-    revalidatePath(`/dashboard/projects/${task.projectId}`);
+    revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+    after(() => invalidateProjectCache(task.projectId));
   }
   return { success: true };
 }

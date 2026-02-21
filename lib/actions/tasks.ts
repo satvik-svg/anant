@@ -2,8 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { invalidateProjectCache } from "@/lib/redis";
 
 async function getCurrentUserId() {
   const session = await auth();
@@ -81,8 +82,8 @@ export async function createTask(formData: FormData) {
     ]);
   });
 
-  revalidateTag(`project-${projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${projectId}`);
+  revalidatePath(`/dashboard/projects/${projectId}`, "page");
+  after(() => invalidateProjectCache(projectId));
   return { success: true };
 }
 
@@ -174,9 +175,9 @@ export async function updateTask(taskId: string, data: {
     if (logAndNotify.length > 0) await Promise.all(logAndNotify);
   });
 
-  revalidateTag(`project-${task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${task.projectId}`);
-  revalidatePath("/dashboard/my-tasks");
+  revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+  revalidatePath("/dashboard/my-tasks", "page");
+  after(() => invalidateProjectCache(task.projectId));
   return { success: true };
 }
 
@@ -185,9 +186,9 @@ export async function deleteTask(taskId: string) {
   if (!task) return { error: "Task not found" };
 
   await prisma.task.delete({ where: { id: taskId } });
-  revalidateTag(`project-${task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${task.projectId}`);
-  revalidatePath("/dashboard/my-tasks");
+  revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+  revalidatePath("/dashboard/my-tasks", "page");
+  after(() => invalidateProjectCache(task.projectId));
   return { success: true };
 }
 
@@ -218,8 +219,8 @@ export async function moveTask(taskId: string, newSectionId: string, newOrder: n
     );
   }
 
-  revalidateTag(`project-${task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${task.projectId}`);
+  revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+  after(() => invalidateProjectCache(task.projectId));
 }
 
 export async function getTask(taskId: string) {
@@ -338,9 +339,9 @@ export async function addTaskAssignee(taskId: string, userId: string) {
     await Promise.all(jobs);
   });
 
-  revalidateTag(`project-${task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${task.projectId}`);
-  revalidatePath("/dashboard/my-tasks");
+  revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+  revalidatePath("/dashboard/my-tasks", "page");
+  after(() => invalidateProjectCache(task.projectId));
   return { success: true };
 }
 
@@ -372,9 +373,9 @@ export async function removeTaskAssignee(taskId: string, userId: string) {
     })
   );
 
-  revalidateTag(`project-${task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${task.projectId}`);
-  revalidatePath("/dashboard/my-tasks");
+  revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+  revalidatePath("/dashboard/my-tasks", "page");
+  after(() => invalidateProjectCache(task.projectId));
   return { success: true };
 }
 
@@ -429,9 +430,9 @@ export async function updateTaskAssignees(taskId: string, userIds: string[]) {
     ]);
   });
 
-  revalidateTag(`project-${task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${task.projectId}`);
-  revalidatePath("/dashboard/my-tasks");
+  revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+  revalidatePath("/dashboard/my-tasks", "page");
+  after(() => invalidateProjectCache(task.projectId));
   return { success: true };
 }
 

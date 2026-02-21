@@ -2,8 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { invalidateProjectCache } from "@/lib/redis";
 
 async function getCurrentUserId() {
   const session = await auth();
@@ -36,8 +37,8 @@ export async function createSubtask(taskId: string, title: string) {
     })
   );
 
-  revalidateTag(`project-${task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${task.projectId}`);
+  revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
+  after(() => invalidateProjectCache(task.projectId));
   return { success: true, subtask };
 }
 
@@ -66,8 +67,8 @@ export async function toggleSubtask(subtaskId: string) {
     })
   );
 
-  revalidateTag(`project-${subtask.task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${subtask.task.projectId}`);
+  revalidatePath(`/dashboard/projects/${subtask.task.projectId}`, "page");
+  after(() => invalidateProjectCache(subtask.task.projectId));
   return { success: true };
 }
 
@@ -79,8 +80,8 @@ export async function deleteSubtask(subtaskId: string) {
   if (!subtask) return { error: "Subtask not found" };
 
   await prisma.subtask.delete({ where: { id: subtaskId } });
-  revalidateTag(`project-${subtask.task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${subtask.task.projectId}`);
+  revalidatePath(`/dashboard/projects/${subtask.task.projectId}`, "page");
+  after(() => invalidateProjectCache(subtask.task.projectId));
   return { success: true };
 }
 
@@ -96,8 +97,8 @@ export async function updateSubtask(subtaskId: string, data: { title?: string; a
     data,
   });
 
-  revalidateTag(`project-${subtask.task.projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${subtask.task.projectId}`);
+  revalidatePath(`/dashboard/projects/${subtask.task.projectId}`, "page");
+  after(() => invalidateProjectCache(subtask.task.projectId));
   return { success: true };
 }
 

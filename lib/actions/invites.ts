@@ -3,7 +3,9 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { sendInviteEmail } from "@/lib/email";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { invalidateProjectCache, invalidateUserCaches, teamsListCacheKey, projectsListCacheKey } from "@/lib/redis";
+import { after } from "next/server";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://anant-ivory.vercel.app";
 
@@ -59,9 +61,13 @@ export async function addUserToProjectTeam(projectId: string, userId: string) {
     },
   });
 
-  revalidateTag(`project-${projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${projectId}`);
+  // Bust caches for the invited user so their sidebar refreshes
+  revalidatePath(`/dashboard/projects/${projectId}`, "page");
   revalidatePath("/dashboard/team");
+  after(() => Promise.all([
+    invalidateProjectCache(projectId),
+    invalidateUserCaches(teamsListCacheKey(userId), projectsListCacheKey(userId)),
+  ]));
   return { success: true };
 }
 
@@ -203,10 +209,18 @@ export async function acceptInvite(token: string): Promise<{ success?: boolean; 
       },
     });
 
-    revalidateTag(`project-${invite.projectId}`, "max");
-    revalidatePath(`/dashboard/projects/${invite.projectId}`);
+    // Bust the new member's sidebar caches so they see the project/team immediately
+    const newMemberId = session.user!.id!;
+    revalidatePath(`/dashboard/projects/${invite.projectId}`, "page");
     revalidatePath("/dashboard/team");
     revalidatePath("/dashboard");
+    after(() => Promise.all([
+      invalidateProjectCache(invite.projectId),
+      invalidateUserCaches(
+        teamsListCacheKey(newMemberId),
+        projectsListCacheKey(newMemberId),
+      ),
+    ]));
 
     return { success: true, projectId: invite.projectId };
   } catch (err) {

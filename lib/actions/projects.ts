@@ -2,7 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { redis, projectCacheKey, projectsListCacheKey, invalidateProjectCache, invalidateUserCaches, PROJECT_CACHE_TTL, LIST_CACHE_TTL } from "@/lib/redis";
+import { after } from "next/server";
 
 async function getCurrentUserId() {
   const session = await auth();
@@ -36,6 +38,8 @@ export async function createProject(formData: FormData) {
     },
   });
 
+  // Bust the sidebar projects list for this user
+  after(() => invalidateUserCaches(projectsListCacheKey(userId)));
   revalidatePath("/dashboard");
   return { success: true, projectId: project.id };
 }
@@ -50,27 +54,35 @@ export async function updateProject(projectId: string, formData: FormData) {
     data: { name, description, color },
   });
 
-  revalidateTag(`project-${projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${projectId}`);
+  revalidatePath(`/dashboard/projects/${projectId}`, "page");
   revalidatePath("/dashboard");
+  after(() => invalidateProjectCache(projectId));
 }
 
 export async function deleteProject(projectId: string) {
+  const userId = await getCurrentUserId();
   await prisma.project.delete({ where: { id: projectId } });
+  after(() => invalidateUserCaches(projectsListCacheKey(userId)));
   revalidatePath("/dashboard");
 }
 
 export async function getProjects() {
   const userId = await getCurrentUserId();
-  const teams = await prisma.teamMember.findMany({
-    where: { userId },
-    select: { teamId: true },
-  });
+  const cacheKey = projectsListCacheKey(userId);
 
-  const teamIds = teams.map((t: { teamId: string }) => t.teamId);
+  const cached = await redis.get<unknown>(cacheKey);
+  if (cached) return cached as Awaited<ReturnType<typeof fetchProjects>>;
 
+  const projects = await fetchProjects(userId);
+
+  after(() => redis.setex(cacheKey, LIST_CACHE_TTL, JSON.stringify(projects)));
+  return projects;
+}
+
+async function fetchProjects(userId: string) {
+  // Single query via relation filter — no separate teamMember lookup needed
   return prisma.project.findMany({
-    where: { teamId: { in: teamIds } },
+    where: { team: { members: { some: { userId } } } },
     include: {
       _count: { select: { tasks: true } },
       creator: { select: { name: true, avatar: true } },
@@ -80,42 +92,54 @@ export async function getProjects() {
 }
 
 export async function getProject(projectId: string) {
-  return unstable_cache(
-    () =>
-      prisma.project.findUnique({
-        where: { id: projectId },
+  const cacheKey = projectCacheKey(projectId);
+
+  // L1: Redis distributed cache — shared across all serverless instances
+  const cached = await redis.get<unknown>(cacheKey);
+  if (cached) return cached as Awaited<ReturnType<typeof fetchProject>>;
+
+  const project = await fetchProject(projectId);
+
+  // Populate cache in the background so the response isn't blocked
+  if (project) {
+    after(() => redis.setex(cacheKey, PROJECT_CACHE_TTL, JSON.stringify(project)));
+  }
+
+  return project;
+}
+
+async function fetchProject(projectId: string) {
+  return prisma.project.findUnique({
+    where: { id: projectId },
+    include: {
+      sections: {
+        orderBy: { order: "asc" },
         include: {
-          sections: {
+          tasks: {
             orderBy: { order: "asc" },
             include: {
-              tasks: {
-                orderBy: { order: "asc" },
+              assignee: { select: { id: true, name: true, avatar: true, email: true } },
+              assignees: {
                 include: {
-                  assignee: { select: { id: true, name: true, avatar: true, email: true } },
-                  assignees: {
-                    include: {
-                      user: { select: { id: true, name: true, avatar: true, email: true } },
-                    },
-                  },
-                  _count: { select: { comments: true, attachments: true } },
+                  user: { select: { id: true, name: true, avatar: true, email: true } },
                 },
               },
-            },
-          },
-          team: {
-            include: {
-              members: {
-                include: {
-                  user: { select: { id: true, name: true, email: true, avatar: true } },
-                },
-              },
+              _count: { select: { comments: true, attachments: true } },
             },
           },
         },
-      }),
-    ["getProject", projectId],
-    { tags: [`project-${projectId}`] }
-  )();
+      },
+      team: {
+        include: {
+          members: {
+            include: {
+              user: { select: { id: true, name: true, email: true, avatar: true } },
+            },
+          },
+        },
+      },
+    },
+  });
 }
 
 export async function createSection(projectId: string, name: string) {
@@ -132,12 +156,12 @@ export async function createSection(projectId: string, name: string) {
     },
   });
 
-  revalidateTag(`project-${projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${projectId}`);
+  revalidatePath(`/dashboard/projects/${projectId}`, "page");
+  after(() => invalidateProjectCache(projectId));
 }
 
 export async function deleteSection(sectionId: string, projectId: string) {
   await prisma.section.delete({ where: { id: sectionId } });
-  revalidateTag(`project-${projectId}`, "max");
-  revalidatePath(`/dashboard/projects/${projectId}`);
+  revalidatePath(`/dashboard/projects/${projectId}`, "page");
+  after(() => invalidateProjectCache(projectId));
 }

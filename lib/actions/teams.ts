@@ -3,6 +3,8 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { redis, teamsListCacheKey, projectsListCacheKey, invalidateUserCaches, LIST_CACHE_TTL } from "@/lib/redis";
+import { after } from "next/server";
 
 async function getCurrentUserId() {
   const session = await auth();
@@ -29,6 +31,7 @@ export async function createTeam(name: string) {
     },
   });
 
+  after(() => invalidateUserCaches(teamsListCacheKey(userId), projectsListCacheKey(userId)));
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/team");
   return { success: true, teamId: team.id };
@@ -36,6 +39,18 @@ export async function createTeam(name: string) {
 
 export async function getTeams() {
   const userId = await getCurrentUserId();
+  const cacheKey = teamsListCacheKey(userId);
+
+  const cached = await redis.get<unknown>(cacheKey);
+  if (cached) return cached as Awaited<ReturnType<typeof fetchTeams>>;
+
+  const teams = await fetchTeams(userId);
+
+  after(() => redis.setex(cacheKey, LIST_CACHE_TTL, JSON.stringify(teams)));
+  return teams;
+}
+
+async function fetchTeams(userId: string) {
   return prisma.team.findMany({
     where: {
       members: { some: { userId } },
@@ -64,6 +79,13 @@ export async function inviteToTeam(teamId: string, email: string) {
     data: { userId: user.id, teamId, role: "member" },
   });
 
+  // Bust both users' list caches
+  const currentUserId = await getCurrentUserId();
+  after(() => invalidateUserCaches(
+    teamsListCacheKey(user.id),
+    projectsListCacheKey(user.id),
+    teamsListCacheKey(currentUserId),
+  ));
   revalidatePath("/dashboard");
   return { success: true };
 }
@@ -72,5 +94,6 @@ export async function removeFromTeam(teamId: string, userId: string) {
   await prisma.teamMember.delete({
     where: { userId_teamId: { userId, teamId } },
   });
+  after(() => invalidateUserCaches(teamsListCacheKey(userId), projectsListCacheKey(userId)));
   revalidatePath("/dashboard");
 }
