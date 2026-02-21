@@ -59,20 +59,20 @@ interface Props {
 }
 
 const CATEGORIES: Record<string, { label: string; color: string; bg: string }> = {
-  general: { label: "General", color: "text-gray-600", bg: "bg-gray-100" },
-  feature: { label: "Feature", color: "text-blue-600", bg: "bg-blue-50" },
-  improvement: { label: "Improvement", color: "text-green-600", bg: "bg-green-50" },
-  bug: { label: "Bug Fix", color: "text-red-600", bg: "bg-red-50" },
-  other: { label: "Other", color: "text-purple-600", bg: "bg-purple-50" },
+  general: { label: "General", color: "text-[#a3a3a3]", bg: "bg-[#2a2a2a]" },
+  feature: { label: "Feature", color: "text-blue-400", bg: "bg-blue-900/40" },
+  improvement: { label: "Improvement", color: "text-green-400", bg: "bg-green-900/40" },
+  bug: { label: "Bug Fix", color: "text-red-400", bg: "bg-red-900/40" },
+  other: { label: "Other", color: "text-[#8a9a5b]", bg: "bg-[#1f2414]" },
 };
 
 const STATUSES: Record<string, { label: string; color: string; bg: string }> = {
-  new: { label: "New", color: "text-blue-700", bg: "bg-blue-50" },
-  under_review: { label: "Under Review", color: "text-amber-700", bg: "bg-amber-50" },
-  approved: { label: "Approved", color: "text-green-700", bg: "bg-green-50" },
-  in_progress: { label: "In Progress", color: "text-indigo-700", bg: "bg-indigo-50" },
-  done: { label: "Done", color: "text-emerald-700", bg: "bg-emerald-50" },
-  archived: { label: "Archived", color: "text-gray-500", bg: "bg-gray-100" },
+  new: { label: "New", color: "text-blue-400", bg: "bg-blue-900/40" },
+  under_review: { label: "Under Review", color: "text-amber-400", bg: "bg-amber-900/40" },
+  approved: { label: "Approved", color: "text-green-400", bg: "bg-green-900/40" },
+  in_progress: { label: "In Progress", color: "text-[#8a9a5b]", bg: "bg-[#1f2414]" },
+  done: { label: "Done", color: "text-emerald-400", bg: "bg-emerald-900/40" },
+  archived: { label: "Archived", color: "text-[#737373]", bg: "bg-[#2a2a2a]" },
 };
 
 export function IdeasBoard({ ideas, teams, currentUserId }: Props) {
@@ -107,7 +107,7 @@ export function IdeasBoard({ ideas, teams, currentUserId }: Props) {
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
             <option value="">All Categories</option>
             {Object.entries(CATEGORIES).map(([k, v]) => (
@@ -117,7 +117,7 @@ export function IdeasBoard({ ideas, teams, currentUserId }: Props) {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
             <option value="">All Statuses</option>
             {Object.entries(STATUSES).map(([k, v]) => (
@@ -127,7 +127,7 @@ export function IdeasBoard({ ideas, teams, currentUserId }: Props) {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as "newest" | "most_voted")}
-            className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
+            className="text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
             <option value="newest">Newest First</option>
             <option value="most_voted">Most Voted</option>
@@ -137,9 +137,9 @@ export function IdeasBoard({ ideas, teams, currentUserId }: Props) {
 
       {/* Ideas list */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <Lightbulb className="w-10 h-10 text-amber-300 mx-auto mb-3" />
-          <p className="text-gray-500">
+        <div className="bg-[#212121] rounded-xl border border-[#2e2e2e] p-12 text-center">
+          <Lightbulb className="w-10 h-10 text-amber-400 mx-auto mb-3" />
+          <p className="text-[#a3a3a3]">
             {ideas.length === 0
               ? "No ideas yet. Be the first to share one!"
               : "No ideas match your filters."}
@@ -234,7 +234,7 @@ function IdeaCard({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-gray-300 transition">
+    <div className="bg-[#212121] rounded-xl border border-[#2e2e2e] overflow-hidden hover:border-[#3a3a3a] transition">
       <div className="flex items-start gap-3 p-4">
         {/* Upvote button */}
         <button
@@ -242,8 +242,8 @@ function IdeaCard({
           disabled={isPending}
           className={`flex flex-col items-center min-w-[48px] py-2 px-1 rounded-lg border transition text-xs font-semibold ${
             hasVoted
-              ? "bg-amber-50 border-amber-300 text-amber-600"
-              : "bg-gray-50 border-gray-200 text-gray-500 hover:border-amber-300 hover:text-amber-600"
+              ? "bg-amber-900/40 border-amber-700/40 text-amber-400"
+              : "bg-[#2a2a2a] border-[#3a3a3a] text-[#737373] hover:border-amber-600/50 hover:text-amber-400"
           }`}
         >
           <ChevronUp className="w-4 h-4" />
@@ -257,24 +257,24 @@ function IdeaCard({
               <input
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
               <textarea
                 value={editDesc}
                 onChange={(e) => setEditDesc(e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
+                className="w-full px-3 py-2 bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] placeholder-[#525252] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
                 placeholder="Describe your idea..."
               />
               <div className="flex items-center gap-2">
-                <select value={editCategory} onChange={(e) => setEditCategory(e.target.value)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5">
+                <select value={editCategory} onChange={(e) => setEditCategory(e.target.value)} className="text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg px-2 py-1.5">
                   {Object.entries(CATEGORIES).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
                 </select>
-                <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5">
+                <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)} className="text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#d4d4d4] rounded-lg px-2 py-1.5">
                   {Object.entries(STATUSES).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
                 </select>
                 <div className="flex gap-1.5 ml-auto">
-                  <button onClick={onStopEdit} className="px-3 py-1.5 text-xs text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50">Cancel</button>
+                  <button onClick={onStopEdit} className="px-3 py-1.5 text-xs text-[#a3a3a3] border border-[#3a3a3a] rounded-lg hover:bg-[#2a2a2a]">Cancel</button>
                   <button onClick={handleSaveEdit} disabled={isPending} className="px-3 py-1.5 text-xs text-white bg-amber-500 rounded-lg hover:bg-amber-600 disabled:opacity-50 flex items-center gap-1">
                     {isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />} Save
                   </button>
@@ -285,17 +285,17 @@ function IdeaCard({
             <>
               <div className="flex items-start justify-between gap-2">
                 <button onClick={onToggleExpand} className="text-left flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 text-sm leading-snug">{idea.title}</h3>
+                  <h3 className="font-semibold text-[#f5f5f5] text-sm leading-snug">{idea.title}</h3>
                   {idea.description && (
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">{idea.description}</p>
+                    <p className="text-xs text-[#a3a3a3] mt-1 line-clamp-2">{idea.description}</p>
                   )}
                 </button>
                 {isCreator && (
                   <div className="flex items-center gap-1 shrink-0">
-                    <button onClick={onStartEdit} className="p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition">
+                    <button onClick={onStartEdit} className="p-1.5 text-[#737373] hover:text-amber-400 hover:bg-amber-900/30 rounded-lg transition">
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
-                    <button onClick={handleDelete} disabled={isPending} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+                    <button onClick={handleDelete} disabled={isPending} className="p-1.5 text-[#737373] hover:text-red-400 hover:bg-red-950/40 rounded-lg transition">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -310,20 +310,20 @@ function IdeaCard({
                 <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${status.bg} ${status.color}`}>
                   {status.label}
                 </span>
-                <span className="text-[11px] text-gray-400">·</span>
+                <span className="text-[11px] text-[#525252]">·</span>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium">
+                  <div className="w-5 h-5 rounded-full bg-[#6B7A45] flex items-center justify-center text-white text-[10px] font-medium">
                     {idea.creator.name[0].toUpperCase()}
                   </div>
-                  <span className="text-[11px] text-gray-500">{idea.creator.name}</span>
+                  <span className="text-[11px] text-[#a3a3a3]">{idea.creator.name}</span>
                 </div>
-                <span className="text-[11px] text-gray-400">·</span>
-                <span className="text-[11px] text-gray-400">{idea.team.name}</span>
-                <span className="text-[11px] text-gray-400">·</span>
-                <span className="text-[11px] text-gray-400">{format(new Date(idea.createdAt), "MMM d")}</span>
+                <span className="text-[11px] text-[#525252]">·</span>
+                <span className="text-[11px] text-[#737373]">{idea.team.name}</span>
+                <span className="text-[11px] text-[#525252]">·</span>
+                <span className="text-[11px] text-[#737373]">{format(new Date(idea.createdAt), "MMM d")}</span>
                 <button
                   onClick={onToggleExpand}
-                  className="inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-gray-600 ml-auto"
+                  className="inline-flex items-center gap-1 text-[11px] text-[#737373] hover:text-[#a3a3a3] ml-auto"
                 >
                   <MessageSquare className="w-3 h-3" />
                   {idea._count.comments}
@@ -336,7 +336,7 @@ function IdeaCard({
 
       {/* Expanded comments section */}
       {isExpanded && !isEditing && (
-        <div className="border-t border-gray-100 bg-gray-50/50 p-4">
+        <div className="border-t border-[#262626] bg-[#1a1a1a] p-4">
           {/* Comments */}
           {idea.comments && idea.comments.length > 0 ? (
             <div className="space-y-3 mb-4">
@@ -345,7 +345,7 @@ function IdeaCard({
               ))}
             </div>
           ) : (
-            <p className="text-xs text-gray-400 mb-4">No comments yet. Be the first!</p>
+            <p className="text-xs text-[#525252] mb-4">No comments yet. Be the first!</p>
           )}
 
           {/* Add comment */}
@@ -355,7 +355,7 @@ function IdeaCard({
               onChange={(e) => setComment(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleAddComment()}
               placeholder="Write a comment..."
-              className="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="flex-1 px-3 py-2 bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] placeholder-[#525252] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
             <button
               onClick={handleAddComment}
@@ -383,24 +383,24 @@ function CommentRow({ comment, currentUserId }: { comment: IdeaComment; currentU
 
   return (
     <div className="flex items-start gap-2.5 group">
-      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium shrink-0 mt-0.5">
+      <div className="w-6 h-6 rounded-full bg-[#6B7A45] flex items-center justify-center text-white text-[10px] font-medium shrink-0 mt-0.5">
         {comment.author.name[0].toUpperCase()}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-gray-900">{comment.author.name}</span>
-          <span className="text-[10px] text-gray-400">{format(new Date(comment.createdAt), "MMM d, h:mm a")}</span>
+          <span className="text-xs font-medium text-[#f5f5f5]">{comment.author.name}</span>
+          <span className="text-[10px] text-[#525252]">{format(new Date(comment.createdAt), "MMM d, h:mm a")}</span>
           {comment.author.id === currentUserId && (
             <button
               onClick={handleDelete}
               disabled={isPending}
-              className="opacity-0 group-hover:opacity-100 p-0.5 text-gray-400 hover:text-red-500 transition"
+              className="opacity-0 group-hover:opacity-100 p-0.5 text-[#737373] hover:text-red-400 transition"
             >
               <Trash2 className="w-3 h-3" />
             </button>
           )}
         </div>
-        <p className="text-sm text-gray-600 mt-0.5">{comment.content}</p>
+        <p className="text-sm text-[#a3a3a3] mt-0.5">{comment.content}</p>
       </div>
     </div>
   );
@@ -425,56 +425,56 @@ function CreateIdeaDialog({ teams, onClose }: { teams: Team[]; onClose: () => vo
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+      <div className="bg-[#1e1e1e] border border-[#2e2e2e] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
         <div className="p-6 pb-0 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-amber-50 rounded-xl flex items-center justify-center">
-              <Lightbulb className="w-5 h-5 text-amber-500" />
+            <div className="w-9 h-9 bg-amber-900/40 rounded-xl flex items-center justify-center">
+              <Lightbulb className="w-5 h-5 text-amber-400" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">New Idea</h2>
+            <h2 className="text-lg font-semibold text-[#f5f5f5]">New Idea</h2>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition">
+          <button onClick={onClose} className="p-1.5 rounded-lg text-[#737373] hover:text-[#a3a3a3] hover:bg-[#2a2a2a] transition">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form ref={formRef} action={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
+            <div className="p-3 bg-red-950/40 border border-red-900/40 rounded-lg text-sm text-red-400">{error}</div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+            <label className="block text-sm font-medium text-[#a3a3a3] mb-1">Title *</label>
             <input
               name="title"
               required
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              className="w-full px-3 py-2.5 bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] placeholder-[#525252] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               placeholder="What's your idea?"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label className="block text-sm font-medium text-[#a3a3a3] mb-1">Description</label>
             <textarea
               name="description"
               rows={4}
-              className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+              className="w-full px-3 py-2.5 bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] placeholder-[#525252] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
               placeholder="Describe your idea in detail..."
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-              <select name="category" className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <label className="block text-sm font-medium text-[#a3a3a3] mb-1">Category</label>
+              <select name="category" className="w-full px-3 py-2.5 bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
                 {Object.entries(CATEGORIES).map(([k, v]) => (
                   <option key={k} value={k}>{v.label}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Team *</label>
-              <select name="teamId" required className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <label className="block text-sm font-medium text-[#a3a3a3] mb-1">Team *</label>
+              <select name="teamId" required className="w-full px-3 py-2.5 bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
                 {teams.map((t) => (
                   <option key={t.id} value={t.id}>{t.name}</option>
                 ))}
@@ -483,7 +483,7 @@ function CreateIdeaDialog({ teams, onClose }: { teams: Team[]; onClose: () => vo
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-[#a3a3a3] border border-[#3a3a3a] rounded-lg hover:bg-[#2a2a2a] transition">
               Cancel
             </button>
             <button

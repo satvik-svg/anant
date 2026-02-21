@@ -78,7 +78,7 @@ export function PortfoliosList({
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setShowCreate(true)}
-          className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg hover:from-indigo-600 hover:to-purple-700 transition"
+          className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-[#6B7A45] rounded-lg hover:bg-[#5a6838] transition"
         >
           <Plus className="w-4 h-4" />
           New Portfolio
@@ -88,10 +88,10 @@ export function PortfoliosList({
       {/* Create Modal */}
       {showCreate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6">
+          <div className="bg-[#1e1e1e] border border-[#2e2e2e] rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">New Portfolio</h3>
-              <button onClick={() => setShowCreate(false)} className="text-gray-400 hover:text-gray-600">
+              <h3 className="text-lg font-semibold text-[#f5f5f5]">New Portfolio</h3>
+              <button onClick={() => setShowCreate(false)} className="text-[#737373] hover:text-[#a3a3a3]">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -100,7 +100,7 @@ export function PortfoliosList({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Portfolio name"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-3 py-2 text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] placeholder-[#525252] rounded-lg focus:ring-2 focus:ring-[#6B7A45] outline-none"
                 autoFocus
               />
               <textarea
@@ -108,12 +108,12 @@ export function PortfoliosList({
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Description (optional)"
                 rows={2}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
+                className="w-full px-3 py-2 text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] placeholder-[#525252] rounded-lg focus:ring-2 focus:ring-[#6B7A45] outline-none resize-none"
               />
               <select
                 value={teamId}
                 onChange={(e) => setTeamId(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-3 py-2 text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] rounded-lg focus:ring-2 focus:ring-[#6B7A45] outline-none"
               >
                 {teams.map((team) => (
                   <option key={team.id} value={team.id}>
@@ -122,13 +122,13 @@ export function PortfoliosList({
                 ))}
               </select>
               <div>
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Color</label>
+                <label className="text-xs font-medium text-[#a3a3a3] mb-1.5 block">Color</label>
                 <div className="flex gap-2">
                   {COLORS.map((c) => (
                     <button
                       key={c}
                       onClick={() => setColor(c)}
-                      className={`w-7 h-7 rounded-full transition ${color === c ? "ring-2 ring-offset-2 ring-indigo-500" : ""}`}
+                      className={`w-7 h-7 rounded-full transition ${color === c ? "ring-2 ring-offset-2 ring-offset-[#1e1e1e] ring-[#6B7A45]" : ""}`}
                       style={{ backgroundColor: c }}
                     />
                   ))}
@@ -138,11 +138,11 @@ export function PortfoliosList({
                 <button
                   onClick={handleCreate}
                   disabled={!name.trim() || isPending}
-                  className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 text-sm font-medium text-white bg-[#6B7A45] rounded-lg hover:bg-[#5a6838] disabled:opacity-50"
                 >
                   Create
                 </button>
-                <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-sm text-gray-500 hover:text-gray-700">
+                <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-sm text-[#a3a3a3] hover:text-[#f5f5f5]">
                   Cancel
                 </button>
               </div>
@@ -153,12 +153,12 @@ export function PortfoliosList({
 
       {/* Portfolio Grid */}
       {portfolios.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-          <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 mb-4">No portfolios yet. Group your projects together!</p>
+        <div className="text-center py-16 bg-[#212121] rounded-xl border border-[#2e2e2e]">
+          <Briefcase className="w-12 h-12 text-[#525252] mx-auto mb-3" />
+          <p className="text-[#a3a3a3] mb-4">No portfolios yet. Group your projects together!</p>
           <button
             onClick={() => setShowCreate(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-[#6B7A45] rounded-lg hover:bg-[#5a6838]"
           >
             <Plus className="w-4 h-4" />
             Create Portfolio
@@ -167,24 +167,24 @@ export function PortfoliosList({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {portfolios.map((portfolio) => (
-            <div key={portfolio.id} className="bg-white rounded-xl border border-gray-200 p-5 group">
+            <div key={portfolio.id} className="bg-[#212121] rounded-xl border border-[#2e2e2e] p-5 group">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-3">
                   <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center text-white"
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-white shrink-0"
                     style={{ backgroundColor: portfolio.color }}
                   >
                     <Briefcase className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{portfolio.name}</h3>
-                    {portfolio.description && <p className="text-sm text-gray-500 mt-0.5">{portfolio.description}</p>}
-                    <p className="text-xs text-gray-400 mt-1">{portfolio.team.name} · {portfolio.projects.length} projects</p>
+                    <h3 className="font-semibold text-[#f5f5f5]">{portfolio.name}</h3>
+                    {portfolio.description && <p className="text-sm text-[#a3a3a3] mt-0.5">{portfolio.description}</p>}
+                    <p className="text-xs text-[#737373] mt-1">{portfolio.team.name} · {portfolio.projects.length} projects</p>
                   </div>
                 </div>
                 <button
                   onClick={() => handleDelete(portfolio.id)}
-                  className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition opacity-0 group-hover:opacity-100"
+                  className="p-1.5 text-[#737373] hover:text-red-400 rounded-lg hover:bg-red-950/40 transition opacity-0 group-hover:opacity-100"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -196,19 +196,19 @@ export function PortfoliosList({
                     <Link
                       key={pp.project.id}
                       href={`/dashboard/projects/${pp.project.id}`}
-                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition"
+                      className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#1f1f1f] transition"
                     >
                       <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: pp.project.color }}>
                         {pp.project.name[0]}
                       </div>
-                      <span className="text-sm text-gray-700 flex-1">{pp.project.name}</span>
-                      <span className="text-xs text-gray-400">{pp.project._count.tasks} tasks</span>
+                      <span className="text-sm text-[#d4d4d4] flex-1">{pp.project.name}</span>
+                      <span className="text-xs text-[#737373]">{pp.project._count.tasks} tasks</span>
                     </Link>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-4 text-sm text-gray-400 bg-gray-50 rounded-lg">
-                  <FolderOpen className="w-5 h-5 mx-auto mb-1 text-gray-300" />
+                <div className="text-center py-4 text-sm text-[#737373] bg-[#1a1a1a] rounded-lg">
+                  <FolderOpen className="w-5 h-5 mx-auto mb-1 text-[#525252]" />
                   No projects added yet
                 </div>
               )}

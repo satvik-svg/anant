@@ -436,3 +436,74 @@ export async function updateTaskAssignees(taskId: string, userIds: string[]) {
   revalidatePath("/dashboard/my-tasks");
   return { success: true };
 }
+
+export type MyTaskItem = {
+  id: string;
+  title: string;
+  priority: string;
+  dueDate: Date | null;
+  completed: boolean;
+  project: { id: string; name: string; color: string };
+};
+
+export type MyTasksResult = {
+  upcoming: MyTaskItem[];
+  overdue: MyTaskItem[];
+  completed: MyTaskItem[];
+  completedThisWeek: MyTaskItem[];
+  total: number;
+};
+
+export async function getMyTasks(): Promise<MyTasksResult> {
+  const userId = await getCurrentUserId();
+  const now = new Date();
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+  endOfWeek.setHours(23, 59, 59, 999);
+
+  const raw = await prisma.task.findMany({
+    where: {
+      OR: [
+        { creatorId: userId },
+        { assigneeId: userId },
+        { assignees: { some: { userId } } },
+      ],
+    },
+    include: {
+      project: { select: { id: true, name: true, color: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const tasks: MyTaskItem[] = raw.map((t) => ({
+    id: t.id,
+    title: t.title,
+    priority: t.priority,
+    dueDate: t.dueDate,
+    completed: t.completed,
+    project: { id: t.project.id, name: t.project.name, color: t.project.color },
+  }));
+
+  const upcoming = tasks.filter(
+    (t) => !t.completed && (!t.dueDate || t.dueDate >= now)
+  );
+  const overdue = tasks.filter(
+    (t) => !t.completed && t.dueDate !== null && t.dueDate < now
+  );
+  const completed = tasks.filter((t) => t.completed);
+  const completedThisWeek = raw
+    .filter((t) => t.completed && t.updatedAt >= startOfWeek && t.updatedAt <= endOfWeek)
+    .map((t): MyTaskItem => ({
+      id: t.id,
+      title: t.title,
+      priority: t.priority,
+      dueDate: t.dueDate,
+      completed: t.completed,
+      project: { id: t.project.id, name: t.project.name, color: t.project.color },
+    }));
+
+  return { upcoming, overdue, completed, completedThisWeek, total: tasks.length };
+}

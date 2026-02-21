@@ -65,15 +65,15 @@ export function InviteAcceptClient({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
         {/* Header gradient */}
-        <div className="h-2 bg-gradient-to-r from-indigo-500 to-purple-600" />
+        <div className="h-2 bg-gradient-to-r bg-[#6B7C42]" />
 
         <div className="p-8">
           {/* Logo */}
           <div className="flex items-center gap-2.5 mb-8">
-            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+            <div className="w-9 h-9 bg-[#6B7C42] rounded-xl flex items-center justify-center text-white font-bold text-lg">
               A
             </div>
             <span className="text-xl font-bold text-gray-900">Anant</span>
@@ -91,7 +91,7 @@ export function InviteAcceptClient({
             <>
               {/* Inviter info */}
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-medium flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#6B7C42] flex items-center justify-center text-white font-medium flex-shrink-0">
                   {inviterAvatar ? (
                     <img src={inviterAvatar} className="w-10 h-10 rounded-full" alt="" />
                   ) : (
@@ -134,7 +134,7 @@ export function InviteAcceptClient({
                 <button
                   onClick={handleAccept}
                   disabled={isPending}
-                  className="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 transition flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-gradient-to-r bg-[#6B7C42] text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 transition flex items-center justify-center gap-2"
                 >
                   {isPending ? (
                     <>
@@ -149,7 +149,7 @@ export function InviteAcceptClient({
                 <div className="space-y-3">
                   <a
                     href={`/login?callbackUrl=/invite/${token}`}
-                    className="block w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-semibold text-center hover:from-indigo-600 hover:to-purple-700 transition"
+                    className="block w-full py-3 bg-black text-white rounded-xl font-semibold text-center hover:bg-gray-800 transition"
                   >
                     Log in to Accept
                   </a>

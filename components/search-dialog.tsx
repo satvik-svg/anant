@@ -69,11 +69,11 @@ export function SearchDialog() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-400 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+        className="flex items-center gap-2 w-full px-3 py-2 text-sm text-[#737373] bg-[#1f1f1f] hover:bg-[#262626] rounded-lg transition"
       >
         <Search className="w-4 h-4" />
         <span>Search...</span>
-        <kbd className="ml-auto text-xs bg-white px-1.5 py-0.5 rounded border border-gray-200">
+        <kbd className="ml-auto text-xs bg-[#2a2a2a] border border-[#3a3a3a] text-[#737373] px-1.5 py-0.5 rounded">
           Ctrl+K
         </kbd>
       </button>
@@ -82,19 +82,19 @@ export function SearchDialog() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-[#141414] border border-[#262626] rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden" onClick={(e) => e.stopPropagation()}>
         {/* Search input */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
-          <Search className="w-5 h-5 text-gray-400" />
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-[#262626]">
+          <Search className="w-5 h-5 text-[#525252]" />
           <input
             ref={inputRef}
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
             placeholder="Search tasks & projects..."
-            className="flex-1 text-sm outline-none"
+            className="flex-1 text-sm text-[#f5f5f5] bg-transparent outline-none placeholder:text-[#525252]"
           />
-          {isPending && <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />}
-          <button onClick={() => setOpen(false)} className="p-1 text-gray-400 hover:text-gray-600">
+          {isPending && <Loader2 className="w-4 h-4 text-[#6B7C42] animate-spin" />}
+          <button onClick={() => setOpen(false)} className="p-1 text-[#525252] hover:text-[#a3a3a3]">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -105,20 +105,20 @@ export function SearchDialog() {
             <div className="p-2">
               {results.projects.length > 0 && (
                 <div className="mb-2">
-                  <p className="px-3 py-1 text-xs font-semibold text-gray-400 uppercase">Projects</p>
+                  <p className="px-3 py-1 text-xs font-semibold text-[#525252] uppercase">Projects</p>
                   {results.projects.map((project) => (
                     <Link
                       key={project.id}
                       href={`/dashboard/projects/${project.id}`}
                       onClick={() => setOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition"
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#1f1f1f] transition"
                     >
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: project.color }}>
                         <FolderOpen className="w-4 h-4" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{project.name}</p>
-                        <p className="text-xs text-gray-400">{project._count.tasks} tasks</p>
+                        <p className="text-sm font-medium text-[#f5f5f5] truncate">{project.name}</p>
+                        <p className="text-xs text-[#525252]">{project._count.tasks} tasks</p>
                       </div>
                     </Link>
                   ))}
@@ -127,21 +127,21 @@ export function SearchDialog() {
 
               {results.tasks.length > 0 && (
                 <div>
-                  <p className="px-3 py-1 text-xs font-semibold text-gray-400 uppercase">Tasks</p>
+                  <p className="px-3 py-1 text-xs font-semibold text-[#525252] uppercase">Tasks</p>
                   {results.tasks.map((task) => (
                     <Link
                       key={task.id}
                       href={`/dashboard/projects/${task.project.id}`}
                       onClick={() => setOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition"
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#1f1f1f] transition"
                     >
-                      <CheckSquare className={`w-4 h-4 shrink-0 ${task.completed ? "text-green-500" : "text-gray-300"}`} />
+                      <CheckSquare className={`w-4 h-4 shrink-0 ${task.completed ? "text-green-500" : "text-[#444444]"}`} />
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm ${task.completed ? "line-through text-gray-400" : "text-gray-900"}`}>{task.title}</p>
-                        <p className="text-xs text-gray-400">{task.project.name} · {task.section.name}</p>
+                        <p className={`text-sm ${task.completed ? "line-through text-[#525252]" : "text-[#f5f5f5]"}`}>{task.title}</p>
+                        <p className="text-xs text-[#525252]">{task.project.name} · {task.section.name}</p>
                       </div>
                       {task.assignee && (
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-[10px] font-medium" title={task.assignee.name}>
+                        <div className="w-6 h-6 rounded-full bg-[#6B7C42] flex items-center justify-center text-white text-[10px] font-medium" title={task.assignee.name}>
                           {task.assignee.name[0].toUpperCase()}
                         </div>
                       )}
@@ -151,13 +151,13 @@ export function SearchDialog() {
               )}
 
               {results.tasks.length === 0 && results.projects.length === 0 && (
-                <p className="text-center py-8 text-sm text-gray-400">No results found for &quot;{query}&quot;</p>
+                <p className="text-center py-8 text-sm text-[#525252]">No results found for &quot;{query}&quot;</p>
               )}
             </div>
           )}
 
           {!results && query.length < 2 && (
-            <p className="text-center py-8 text-sm text-gray-400">Type at least 2 characters to search</p>
+            <p className="text-center py-8 text-sm text-[#525252]">Type at least 2 characters to search</p>
           )}
         </div>
       </div>

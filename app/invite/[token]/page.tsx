@@ -25,7 +25,7 @@ export default async function InvitePage({ params }: Props) {
           </div>
           <h1 className="text-xl font-bold text-gray-900 mb-2">Invalid Invite</h1>
           <p className="text-gray-500 mb-6">This invite link is invalid or has been revoked.</p>
-          <a href="/login" className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
+          <a href="/login" className="inline-flex items-center px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition">
             Go to Login
           </a>
         </div>
@@ -44,7 +44,7 @@ export default async function InvitePage({ params }: Props) {
           </div>
           <h1 className="text-xl font-bold text-gray-900 mb-2">Invite Expired</h1>
           <p className="text-gray-500 mb-6">This invite link has expired. Please ask the sender for a new one.</p>
-          <a href="/login" className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
+          <a href="/login" className="inline-flex items-center px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition">
             Go to Login
           </a>
         </div>

@@ -1,103 +1,146 @@
-import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { Clock, Mail, Slack, Calendar, ArrowRight } from "lucide-react";
 import {
-  CheckCircle,
-  LayoutDashboard,
-  Users,
-  Calendar,
-  ArrowRight,
-} from "lucide-react";
+  LandingNav,
+  GridBackground,
+  FloatingCard,
+  TaskCard,
+} from "@/components/landing-page-components";
 
 export default async function Home() {
   const session = await auth();
   if (session) redirect("/dashboard");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      {/* Nav */}
-      <nav className="flex items-center justify-between px-8 py-4 max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-            <CheckCircle className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-bold text-gray-900">Anant</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link
-            href="/login"
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition"
-          >
-            Log in
-          </Link>
-          <Link
-            href="/register"
-            className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition"
-          >
-            Get Started
-          </Link>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-[#0a0a0a] text-[#f5f5f5] relative overflow-hidden">
+      <GridBackground />
 
-      {/* Hero */}
-      <main className="max-w-4xl mx-auto text-center pt-24 pb-16 px-6">
-        <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
-          <CheckCircle className="w-4 h-4" />
-          Work management for modern teams
+      {/* ── Navbar ── */}
+      <LandingNav />
+
+      {/* ── Hero ── */}
+      <main className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-36">
+        <div className="relative z-20 flex flex-col items-center text-center">
+
+          {/* Center logo icon */}
+          <div className="mb-8 bg-[#141414] border border-[#262626] rounded-2xl shadow-lg p-3 inline-flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="Logo"
+              width={60}
+              height={60}
+              className="object-contain rounded-xl"
+            />
+          </div>
+
+          {/* Headline */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight mb-4">
+            Think, plan, and track
+            <br />
+            <span className="text-[#525252]">all in one place</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-base md:text-lg text-[#a3a3a3] max-w-xl mx-auto mb-10">
+            Efficiently manage your tasks and boost productivity.
+          </p>
+
+          {/* CTA */}
+          <a
+            href="/register"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-[#6B7A45] text-white text-base font-semibold rounded-full hover:bg-[#4e5a31] transition-colors shadow-md shadow-[#6B7A45]/30"
+          >
+            Get free demo
+            <ArrowRight className="w-4 h-4" />
+          </a>
         </div>
-        <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 leading-tight mb-6">
-          Manage work,{" "}
-          <span className="bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
-            not chaos
-          </span>
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Break down goals into tasks, assign them with clear deadlines, and
-          visualize progress through Kanban boards and list views. Keep your team
-          aligned and accountable.
-        </p>
-        <Link
-          href="/register"
-          className="inline-flex items-center gap-2 px-8 py-3.5 text-base font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition shadow-lg shadow-indigo-200"
-        >
-          Start for free
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+
+        {/* ── Floating Cards ─ Desktop only (z-10, below hero text) ── */}
+
+        {/* Top-left: Sticky note */}
+        <FloatingCard className="absolute top-36 left-4 xl:left-12 hidden lg:block w-56 -rotate-3 hover:rotate-0 transition-transform duration-500 z-10 bg-[#1c1a0e] border-[#3d3810]">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-3 h-3 rounded-full bg-red-400" />
+          </div>
+          <p className="text-sm font-medium leading-relaxed text-[#c4b85a] italic">
+            "Take notes to keep track of crucial details, and accomplish more tasks with ease."
+          </p>
+        </FloatingCard>
+
+        {/* Top-right: Reminders */}
+        <FloatingCard className="absolute top-28 right-4 xl:right-12 hidden lg:block w-72 rotate-3 hover:rotate-0 transition-transform duration-500 z-10">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="text-sm font-bold text-[#f5f5f5]">Reminders</h4>
+            <Clock className="w-4 h-4 text-[#737373]" />
+          </div>
+          <div className="space-y-2">
+            <div className="p-3 bg-[#1a1a1a] rounded-xl border border-[#262626]">
+              <p className="text-xs font-bold text-[#f5f5f5] mb-0.5">Today's Meeting</p>
+              <p className="text-[11px] text-[#737373]">Call with marketing team</p>
+              <div className="flex items-center gap-1 mt-2 text-[#6B7A45] font-semibold text-[11px]">
+                <Clock className="w-3 h-3" />
+                13:00 – 13:45
+              </div>
+            </div>
+            <div className="p-3 bg-[#1a1a1a] rounded-xl border border-[#262626]">
+              <p className="text-xs font-bold text-[#f5f5f5] mb-0.5">Meetings</p>
+              <p className="text-[11px] text-[#737373]">Time</p>
+            </div>
+          </div>
+        </FloatingCard>
+
+        {/* Bottom-left: Today's tasks */}
+        <FloatingCard className="absolute bottom-16 left-4 xl:left-12 hidden lg:block w-72 rotate-2 hover:rotate-0 transition-transform duration-500 z-10">
+          <h4 className="text-sm font-bold text-[#f5f5f5] mb-4">Today's tasks</h4>
+          <TaskCard title="New ideas for campaign" color="bg-orange-400" progress={60} date="Sep 10" />
+          <TaskCard title="Design PPT #4" color="bg-[#6B7A45]" progress={112} date="Sep 18" />
+        </FloatingCard>
+
+        {/* Bottom-right: Integrations */}
+        <FloatingCard className="absolute bottom-20 right-4 xl:right-12 hidden lg:block w-64 -rotate-2 hover:rotate-0 transition-transform duration-500 z-10">
+          <h4 className="text-sm font-bold text-[#f5f5f5] mb-4">100+ Integrations</h4>
+          <div className="flex gap-3">
+            <div className="w-12 h-12 bg-[#1a1a1a] rounded-xl flex items-center justify-center border border-[#262626] shadow-sm">
+              <Mail className="w-6 h-6 text-red-500" />
+            </div>
+            <div className="w-12 h-12 bg-[#1a1a1a] rounded-xl flex items-center justify-center border border-[#262626] shadow-sm">
+              <Slack className="w-6 h-6 text-[#6B7A45]" />
+            </div>
+            <div className="w-12 h-12 bg-[#1a1a1a] rounded-xl flex items-center justify-center border border-[#262626] shadow-sm">
+              <Calendar className="w-6 h-6 text-blue-400" />
+            </div>
+          </div>
+        </FloatingCard>
+
+        {/* ── Mobile fallback card ── */}
+        <div className="mt-16 lg:hidden flex justify-center">
+          <FloatingCard className="w-full max-w-sm p-6">
+            <h4 className="font-bold mb-4 text-[#f5f5f5]">Plan your day</h4>
+            <TaskCard title="Review project scope" color="bg-[#6B7A45]" />
+            <TaskCard title="Team sync at 2 PM" color="bg-[#6B7A45]" progress={100} />
+            <TaskCard title="Update documentation" color="bg-gray-300" />
+          </FloatingCard>
+        </div>
       </main>
 
-      {/* Features */}
-      <section className="max-w-5xl mx-auto px-6 pb-24">
-        <div className="grid sm:grid-cols-3 gap-6">
-          {[
-            {
-              icon: LayoutDashboard,
-              title: "Kanban & List views",
-              desc: "Visualize work your way — drag tasks across columns or sort them in a list.",
-            },
-            {
-              icon: Users,
-              title: "Team collaboration",
-              desc: "Assign tasks, leave comments, and attach files — all in one place.",
-            },
-            {
-              icon: Calendar,
-              title: "Deadlines & priorities",
-              desc: "Set due dates and priorities so nothing slips through the cracks.",
-            },
-          ].map((f) => (
-            <div
-              key={f.title}
-              className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm"
-            >
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
-                <f.icon className="w-5 h-5 text-indigo-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">{f.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
-            </div>
-          ))}
+      {/* ── Footer ── */}
+      <footer className="relative z-10 border-t border-[#262626] py-10 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="Logo" width={36} height={36} className="rounded-lg object-contain" />
+          </div>
+          <p className="text-sm text-[#737373]">
+            © 2026 All rights reserved. Built for modern teams.
+          </p>
+          <div className="flex items-center gap-6 text-sm text-[#737373]">
+            <a href="#" className="hover:text-[#f5f5f5] transition-colors">Privacy</a>
+            <a href="#" className="hover:text-[#f5f5f5] transition-colors">Terms</a>
+          </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }

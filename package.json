@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
-    "postinstall": "prisma generate",
+    "build": "node scripts/prisma-stub-fix.js && prisma generate && next build",
+    "postinstall": "node scripts/prisma-stub-fix.js && prisma generate",
     "start": "next start",
     "lint": "eslint"
   },
@@ -20,7 +20,6 @@
     "lucide-react": "^0.575.0",
     "next": "16.1.6",
     "next-auth": "^5.0.0-beta.30",
-    "prisma": "^7.4.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "resend": "^6.9.2",
@@ -33,8 +32,9 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/uuid": "^10.0.0",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint": "^10.0.1",
+    "eslint-config-next": "^0.2.4",
+    "prisma": "^7.4.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

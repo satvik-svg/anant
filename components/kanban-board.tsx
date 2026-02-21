@@ -73,27 +73,27 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
         {sections.map((section) => (
           <div
             key={section.id}
-            className="flex flex-col bg-gray-100/80 rounded-xl w-80 shrink-0"
+            className="flex flex-col bg-[#212121] border border-[#2e2e2e] rounded-xl w-80 shrink-0"
           >
             {/* Column Header */}
             <div className="flex items-center justify-between px-4 py-3">
               <div className="flex items-center gap-2">
                 <div
                   className={`w-2.5 h-2.5 rounded-full ${
-                    SECTION_COLORS[section.name] || "bg-indigo-500"
+                    SECTION_COLORS[section.name] || "bg-[#EEF0E0]0"
                   }`}
                 />
-                <h3 className="text-sm font-semibold text-gray-700">
+                <h3 className="text-sm font-semibold text-[#d4d4d4]">
                   {section.name}
                 </h3>
-                <span className="text-xs text-gray-400 bg-gray-200 px-1.5 py-0.5 rounded-full">
+                <span className="text-xs text-[#525252] bg-[#2a2a2a] px-1.5 py-0.5 rounded-full">
                   {section.tasks.length}
                 </span>
               </div>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => onAddTask(section.id)}
-                  className="p-1 rounded hover:bg-gray-200 text-gray-400 hover:text-gray-600 transition"
+                  className="p-1 rounded hover:bg-[#2a2a2a] text-[#525252] hover:text-[#d4d4d4] transition"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -107,7 +107,7 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   className={`flex-1 px-3 pb-3 space-y-2 overflow-y-auto min-h-[100px] transition ${
-                    snapshot.isDraggingOver ? "bg-indigo-50/50 rounded-lg" : ""
+                    snapshot.isDraggingOver ? "bg-[#1f2414]/50 rounded-lg" : ""
                   }`}
                 >
                   {section.tasks.map((task, index) => (
@@ -135,7 +135,7 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
             {/* Add task button at bottom */}
             <button
               onClick={() => onAddTask(section.id)}
-              className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-400 hover:text-gray-600 hover:bg-gray-200/50 transition rounded-b-xl"
+              className="flex items-center gap-2 px-4 py-2.5 text-sm text-[#525252] hover:text-[#d4d4d4] hover:bg-[#1a1a1a] transition rounded-b-xl"
             >
               <Plus className="w-4 h-4" />
               Add task
@@ -146,13 +146,13 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
         {/* Add section */}
         <div className="shrink-0 w-80">
           {addingSection ? (
-            <div className="bg-gray-100/80 rounded-xl p-3">
+            <div className="bg-[#212121] border border-[#2e2e2e] rounded-xl p-3">
               <input
                 type="text"
                 value={newSectionName}
                 onChange={(e) => setNewSectionName(e.target.value)}
                 placeholder="Section name"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                className="w-full px-3 py-2 text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] rounded-lg focus:ring-2 focus:ring-[#6B7A45] focus:border-transparent outline-none"
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleAddSection();
@@ -162,13 +162,13 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
               <div className="flex gap-2 mt-2">
                 <button
                   onClick={handleAddSection}
-                  className="px-3 py-1.5 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600"
+                  className="px-3 py-1.5 text-sm font-medium text-white bg-[#6B7A45] rounded-lg hover:bg-[#5a6838]"
                 >
                   Add
                 </button>
                 <button
                   onClick={() => setAddingSection(false)}
-                  className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700"
+                  className="px-3 py-1.5 text-sm font-medium text-[#737373] hover:text-[#d4d4d4]"
                 >
                   Cancel
                 </button>
@@ -177,7 +177,7 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
           ) : (
             <button
               onClick={() => setAddingSection(true)}
-              className="flex items-center gap-2 w-full px-4 py-3 text-sm text-gray-400 hover:text-gray-600 bg-gray-100/50 hover:bg-gray-100 rounded-xl transition"
+              className="flex items-center gap-2 w-full px-4 py-3 text-sm text-[#525252] hover:text-[#d4d4d4] bg-[#1a1a1a] hover:bg-[#1f1f1f] rounded-xl transition"
             >
               <Plus className="w-4 h-4" />
               Add section

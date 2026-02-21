@@ -33,11 +33,11 @@ const TYPE_ICONS: Record<string, typeof Bell> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  assigned: "bg-blue-50 text-blue-600",
-  commented: "bg-purple-50 text-purple-600",
-  completed: "bg-green-50 text-green-600",
-  mentioned: "bg-orange-50 text-orange-600",
-  due_soon: "bg-red-50 text-red-600",
+  assigned: "bg-blue-900/40 text-blue-400",
+  commented: "bg-[#1f2414] text-[#8a9a5b]",
+  completed: "bg-green-900/40 text-green-400",
+  mentioned: "bg-orange-900/40 text-orange-400",
+  due_soon: "bg-red-900/40 text-red-400",
 };
 
 export function InboxList({ notifications }: { notifications: Notification[] }) {
@@ -77,7 +77,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
           <button
             onClick={() => setFilter("all")}
             className={`px-3 py-1.5 text-sm rounded-lg transition ${
-              filter === "all" ? "bg-indigo-50 text-indigo-700 font-medium" : "text-gray-500 hover:bg-gray-100"
+              filter === "all" ? "bg-[#1f2414] text-[#8a9a5b] font-medium" : "text-[#737373] hover:bg-[#2a2a2a] hover:text-[#a3a3a3]"
             }`}
           >
             All ({items.length})
@@ -85,7 +85,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
           <button
             onClick={() => setFilter("unread")}
             className={`px-3 py-1.5 text-sm rounded-lg transition ${
-              filter === "unread" ? "bg-indigo-50 text-indigo-700 font-medium" : "text-gray-500 hover:bg-gray-100"
+              filter === "unread" ? "bg-[#1f2414] text-[#8a9a5b] font-medium" : "text-[#737373] hover:bg-[#2a2a2a] hover:text-[#a3a3a3]"
             }`}
           >
             Unread ({unreadCount})
@@ -95,7 +95,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
           <button
             onClick={handleMarkAllRead}
             disabled={isPending}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#8a9a5b] hover:bg-[#1f2414] rounded-lg transition"
           >
             <CheckCheck className="w-4 h-4" />
             Mark all read
@@ -106,8 +106,8 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
       {/* Notifications */}
       {filtered.length === 0 ? (
         <div className="text-center py-16">
-          <Inbox className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">
+          <Inbox className="w-12 h-12 text-[#525252] mx-auto mb-3" />
+          <p className="text-[#737373]">
             {filter === "unread" ? "No unread notifications" : "No notifications yet"}
           </p>
         </div>
@@ -121,18 +121,18 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
               <div
                 className={`flex items-start gap-3 p-4 rounded-xl border transition group ${
                   notification.read
-                    ? "bg-white border-gray-100"
-                    : "bg-indigo-50/30 border-indigo-100"
+                    ? "bg-[#212121] border-[#2e2e2e]"
+                    : "bg-[#1f2414]/60 border-[#4A5628]/40"
                 }`}
               >
                 <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${colorClass}`}>
                   <Icon className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className={`text-sm ${notification.read ? "text-gray-600" : "text-gray-900 font-medium"}`}>
+                  <p className={`text-sm ${notification.read ? "text-[#a3a3a3]" : "text-[#f5f5f5] font-medium"}`}>
                     {notification.message}
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-xs text-[#525252] mt-1">
                     {format(new Date(notification.createdAt), "MMM d, h:mm a")}
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
                         e.stopPropagation();
                         handleMarkRead(notification.id);
                       }}
-                      className="p-1.5 text-gray-400 hover:text-indigo-600 rounded-lg hover:bg-white transition"
+                      className="p-1.5 text-[#737373] hover:text-[#8a9a5b] rounded-lg hover:bg-[#1f2414] transition"
                       title="Mark as read"
                     >
                       <CheckCircle2 className="w-4 h-4" />
@@ -156,7 +156,7 @@ export function InboxList({ notifications }: { notifications: Notification[] }) 
                       e.stopPropagation();
                       handleDelete(notification.id);
                     }}
-                    className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-white transition"
+                    className="p-1.5 text-[#737373] hover:text-red-400 rounded-lg hover:bg-red-950/40 transition"
                     title="Delete"
                   >
                     <Trash2 className="w-4 h-4" />
