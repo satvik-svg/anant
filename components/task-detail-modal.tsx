@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { getTask, updateTask, deleteTask, updateTaskAssignees } from "@/lib/actions/tasks";
 import { addComment, deleteComment, addAttachment, deleteAttachment } from "@/lib/actions/comments";
 import { createSubtask, toggleSubtask, deleteSubtask } from "@/lib/actions/subtasks";
@@ -122,6 +122,8 @@ const ACTIVITY_LABELS: Record<string, string> = {
 export function TaskDetailModal({ taskId, teamMembers, currentUserId, onClose }: Props) {
   const [task, setTask] = useState<FullTask | null>(null);
   const [loading, setLoading] = useState(true);
+  // Don't re-show the full spinner after initial load — keep existing content visible
+  const initializedRef = useRef(false);
   const [commentText, setCommentText] = useState("");
   const [isPending, startTransition] = useTransition();
   const [editing, setEditing] = useState(false);
@@ -143,12 +145,14 @@ export function TaskDetailModal({ taskId, teamMembers, currentUserId, onClose }:
   }, [taskId]);
 
   async function loadTask() {
-    setLoading(true);
+    // Only show full spinner on first load — subsequent refreshes keep existing content visible
+    if (!initializedRef.current) setLoading(true);
     const data = await getTask(taskId);
     setTask(data as unknown as FullTask);
     setEditTitle(data?.title || "");
     setEditDescription(data?.description || "");
     setLoading(false);
+    initializedRef.current = true;
   }
 
   async function loadActivities() {

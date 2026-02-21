@@ -53,12 +53,19 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
   // Track in-flight drag mutations — while >0, ignore server prop updates so the
   // optimistic state isn't overwritten by stale RSC re-renders (Redis still warm).
   const mutatingRef = useRef(0);
+  // Absorbs the one stale RSC re-render that arrives after moveTask completes
+  // (Redis still has old positions because invalidation runs in after())
+  const pendingRefreshRef = useRef(false);
 
   // Sync from server when RSC re-renders deliver fresh data (only when idle)
   useEffect(() => {
-    if (mutatingRef.current === 0) {
-      setLocalSections(sections);
+    if (mutatingRef.current > 0) return;
+    if (pendingRefreshRef.current) {
+      // skip this one stale update; the next poll will bring correct data
+      pendingRefreshRef.current = false;
+      return;
     }
+    setLocalSections(sections);
   }, [sections]);
 
   async function handleDragEnd(result: DropResult) {
@@ -82,6 +89,10 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
     mutatingRef.current++;
     try {
       await moveTask(taskId, newSectionId, newOrder);
+      // Flag to skip the imminent stale RSC re-render (Redis not yet invalidated)
+      pendingRefreshRef.current = true;
+      // Safety reset: if RSC re-render somehow never comes, unblock after 5s
+      setTimeout(() => { pendingRefreshRef.current = false; }, 5000);
     } finally {
       mutatingRef.current--;
     }
