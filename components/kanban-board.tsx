@@ -96,11 +96,11 @@ export function KanbanBoard({ sections, projectId, teamMembers, onTaskClick, onA
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="flex gap-4 p-6 h-full overflow-x-auto">
+      <div className="flex gap-3 md:gap-4 p-3 md:p-6 h-full overflow-x-auto">
         {localSections.map((section) => (
           <div
             key={section.id}
-            className="flex flex-col bg-[#212121] border border-[#2e2e2e] rounded-xl w-80 shrink-0"
+            className="flex flex-col bg-[#212121] border border-[#2e2e2e] rounded-xl w-[82vw] sm:w-80 shrink-0"
           >
             {/* Column Header */}
             <div className="flex items-center justify-between px-4 py-3">
