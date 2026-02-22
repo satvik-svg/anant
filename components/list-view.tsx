@@ -11,6 +11,7 @@ import {
   ChevronRight,
   MessageSquare,
   Paperclip,
+  FolderOpen,
 } from "lucide-react";
 import { useState } from "react";
 import { updateTask } from "@/lib/actions/tasks";
@@ -30,7 +31,7 @@ interface Task {
   projectId: string;
   assignee: { id: string; name: string; avatar: string | null; email: string } | null;
   assignees?: Array<{ user: { id: string; name: string; avatar: string | null; email: string } }>;
-  _count: { comments: number; attachments: number };
+  _count: { comments: number; attachments: number; taskProjects?: number };
 }
 
 interface Section {
@@ -271,6 +272,12 @@ export function ListView({ sections, projectId, teamMembers, onTaskClick }: Prop
                             <span className="flex items-center gap-1 text-xs text-[#525252]">
                               <Paperclip className="w-3 h-3" />
                               {task._count.attachments}
+                            </span>
+                          )}
+                          {(task._count.taskProjects ?? 0) > 0 && (
+                            <span className="flex items-center gap-1 text-xs text-[#9aad6f]" title={`In ${(task._count.taskProjects ?? 0) + 1} projects`}>
+                              <FolderOpen className="w-3 h-3" />
+                              {(task._count.taskProjects ?? 0) + 1}
                             </span>
                           )}
                         </div>

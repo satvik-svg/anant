@@ -43,7 +43,7 @@ interface Task {
   projectId: string;
   assignee: { id: string; name: string; avatar: string | null; email: string } | null;
   assignees?: Array<{ user: { id: string; name: string; avatar: string | null; email: string } }>;
-  _count: { comments: number; attachments: number };
+  _count: { comments: number; attachments: number; taskProjects?: number };
 }
 
 interface TeamMember {
@@ -69,13 +69,21 @@ interface Project {
   };
 }
 
+interface OtherProject {
+  id: string;
+  name: string;
+  color: string;
+  sections: Array<{ id: string; name: string }>;
+}
+
 interface Props {
   project: Project;
   teamMembers: TeamMember[];
   currentUserId: string;
+  otherProjects?: OtherProject[];
 }
 
-export function ProjectView({ project, teamMembers, currentUserId }: Props) {
+export function ProjectView({ project, teamMembers, currentUserId, otherProjects }: Props) {
   const router = useRouter();
 
   // Auto-refresh every 30 seconds so collaborators see live updates
@@ -365,6 +373,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
           sectionId={defaultSectionId}
           sections={project.sections}
           teamMembers={teamMembers}
+          otherProjects={otherProjects}
           onClose={() => setShowCreateTask(false)}
         />
       )}
