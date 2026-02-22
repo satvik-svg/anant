@@ -112,6 +112,7 @@ async function fetchProject(projectId: string) {
   return prisma.project.findUnique({
     where: { id: projectId },
     include: {
+      creator: { select: { id: true, name: true, avatar: true } },
       sections: {
         orderBy: { order: "asc" },
         include: {
@@ -140,6 +141,33 @@ async function fetchProject(projectId: string) {
       },
     },
   });
+}
+
+export async function getProjectOverview(projectId: string) {
+  await getCurrentUserId();
+
+  const [activities, portfolioConnections] = await Promise.all([
+    prisma.activityLog.findMany({
+      where: { task: { projectId } },
+      include: {
+        user: { select: { id: true, name: true, avatar: true } },
+        task: { select: { id: true, title: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 20,
+    }),
+    prisma.portfolioProject.findMany({
+      where: { projectId },
+      include: {
+        portfolio: { select: { id: true, name: true, color: true } },
+      },
+    }),
+  ]);
+
+  return {
+    activities: JSON.parse(JSON.stringify(activities)),
+    portfolioConnections: JSON.parse(JSON.stringify(portfolioConnections)),
+  };
 }
 
 export async function createSection(projectId: string, name: string) {

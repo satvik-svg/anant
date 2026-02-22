@@ -14,8 +14,12 @@ import {
   X,
   Search,
   UserPlus,
+  FileText,
+  BarChart3,
 } from "lucide-react";
 import { InviteDialog } from "./invite-dialog";
+import { ProjectOverview } from "./project-overview";
+import { ProjectProgress } from "./project-progress";
 
 interface Section {
   id: string;
@@ -54,9 +58,14 @@ interface Project {
   name: string;
   description: string | null;
   color: string;
+  creatorId: string;
+  createdAt: string;
+  creator?: { id: string; name: string; avatar: string | null };
   sections: Section[];
   team: {
-    members: Array<{ user: TeamMember }>;
+    id: string;
+    name: string;
+    members: Array<{ id: string; role: string; user: TeamMember }>;
   };
 }
 
@@ -75,7 +84,7 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
     return () => clearInterval(id);
   }, [router]);
 
-  const [view, setView] = useState<"board" | "list">("board");
+  const [view, setView] = useState<"overview" | "board" | "list" | "progress">("board");
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [defaultSectionId, setDefaultSectionId] = useState<string | null>(null);
@@ -180,6 +189,17 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
           {/* View toggle */}
           <div className="flex items-center bg-[#2a2a2a] rounded-lg p-0.5 flex-shrink-0">
             <button
+              onClick={() => setView("overview")}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-sm font-medium transition ${
+                view === "overview"
+                  ? "bg-[#3a3a3a] text-[#f5f5f5] shadow-sm"
+                  : "text-[#737373] hover:text-[#d4d4d4]"
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Overview</span>
+            </button>
+            <button
               onClick={() => setView("board")}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-sm font-medium transition ${
                 view === "board"
@@ -200,6 +220,17 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
             >
               <List className="w-4 h-4" />
               <span className="hidden sm:inline">List</span>
+            </button>
+            <button
+              onClick={() => setView("progress")}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-sm font-medium transition ${
+                view === "progress"
+                  ? "bg-[#3a3a3a] text-[#f5f5f5] shadow-sm"
+                  : "text-[#737373] hover:text-[#d4d4d4]"
+              }`}
+            >
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">Progress</span>
             </button>
           </div>
 
@@ -292,7 +323,11 @@ export function ProjectView({ project, teamMembers, currentUserId }: Props) {
 
       {/* Content */}
       <div className="flex-1 overflow-auto">
-        {view === "board" ? (
+        {view === "overview" ? (
+          <ProjectOverview project={project} currentUserId={currentUserId} />
+        ) : view === "progress" ? (
+          <ProjectProgress project={project} />
+        ) : view === "board" ? (
           <KanbanBoard
             sections={filteredSections}
             projectId={project.id}
