@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { invalidateProjectCache } from "@/lib/redis";
+import { syncTaskToAssignees, updateCalendarEvent, removeTaskFromCalendars } from "@/lib/google-calendar";
 
 async function getCurrentUserId() {
   const session = await auth();
@@ -80,6 +81,14 @@ export async function createTask(formData: FormData) {
           })
         : Promise.resolve(),
     ]);
+
+    // Google Calendar: sync task to all assignees
+    if (validAssigneeIds.length > 0) {
+      await syncTaskToAssignees(
+        { id: task.id, title, description: description || null, startDate: startDate ? new Date(startDate) : null, dueDate: dueDate ? new Date(dueDate) : null, projectId },
+        validAssigneeIds
+      );
+    }
   });
 
   revalidatePath(`/dashboard/projects/${projectId}`, "page");
@@ -178,12 +187,37 @@ export async function updateTask(taskId: string, data: {
   revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
   revalidatePath("/dashboard/my-tasks", "page");
   after(() => invalidateProjectCache(task.projectId));
+
+  // Google Calendar: update event if due date, start date, or title changed
+  after(async () => {
+    if (task.calendarEventId && (data.title || data.dueDate !== undefined || data.startDate !== undefined || data.description !== undefined)) {
+      const assignees = await prisma.taskAssignee.findMany({ where: { taskId }, select: { userId: true } });
+      for (const { userId: uid } of assignees) {
+        await updateCalendarEvent(uid, task.calendarEventId!, {
+          title: data.title || task.title,
+          description: data.description !== undefined ? (data.description ?? null) : task.description,
+          startDate: data.startDate !== undefined ? (data.startDate ? new Date(data.startDate) : null) : task.startDate,
+          dueDate: data.dueDate !== undefined ? (data.dueDate ? new Date(data.dueDate) : null) : task.dueDate,
+          projectId: task.projectId,
+        });
+      }
+    }
+  });
   return { success: true };
 }
 
 export async function deleteTask(taskId: string) {
-  const task = await prisma.task.findUnique({ where: { id: taskId } });
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+    include: { assignees: { select: { userId: true } } },
+  });
   if (!task) return { error: "Task not found" };
+
+  // Remove calendar events before deleting
+  if (task.calendarEventId) {
+    const assigneeIds = task.assignees.map((a) => a.userId);
+    after(() => removeTaskFromCalendars(taskId, task.calendarEventId, assigneeIds));
+  }
 
   await prisma.task.delete({ where: { id: taskId } });
   revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
@@ -433,6 +467,22 @@ export async function updateTaskAssignees(taskId: string, userIds: string[]) {
   revalidatePath(`/dashboard/projects/${task.projectId}`, "page");
   revalidatePath("/dashboard/my-tasks", "page");
   after(() => invalidateProjectCache(task.projectId));
+
+  // Google Calendar: sync for newly added assignees, remove for removed
+  after(async () => {
+    if (toAdd.length > 0) {
+      await syncTaskToAssignees(
+        { id: taskId, title: task.title, description: task.description, startDate: task.startDate, dueDate: task.dueDate, projectId: task.projectId, calendarEventId: task.calendarEventId },
+        toAdd
+      );
+    }
+    if (toRemove.length > 0 && task.calendarEventId) {
+      const { deleteCalendarEvent } = await import("@/lib/google-calendar");
+      for (const uid of toRemove) {
+        await deleteCalendarEvent(uid, task.calendarEventId);
+      }
+    }
+  });
   return { success: true };
 }
 

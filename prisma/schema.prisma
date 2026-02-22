@@ -13,12 +13,13 @@ model User {
   id             String    @id @default(uuid())
   name           String
   email          String    @unique
-  hashedPassword String
+  hashedPassword String?
   avatar         String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
   // Relations
+  accounts       Account[]
   teamMembers    TeamMember[]
   assignedTasks  Task[]         @relation("TaskAssignee")
   createdTasks   Task[]         @relation("TaskCreator")
@@ -120,8 +121,9 @@ model Task {
   attachments Attachment[]
   subtasks    Subtask[]
   activities  ActivityLog[]
-  tags        TaskTag[]
-  assignees   TaskAssignee[]
+  tags             TaskTag[]
+  assignees        TaskAssignee[]
+  calendarEventId  String?
 }
 
 model Subtask {
@@ -335,4 +337,23 @@ model Note {
   updatedAt DateTime @updatedAt
 
   user User @relation("NoteOwner", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
