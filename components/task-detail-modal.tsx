@@ -6,6 +6,7 @@ import { addComment, deleteComment, addAttachment, deleteAttachment } from "@/li
 import { createSubtask, toggleSubtask, deleteSubtask } from "@/lib/actions/subtasks";
 import { getTaskActivities } from "@/lib/actions/activity";
 import { addTagToTask, removeTagFromTask, createTag, getTags } from "@/lib/actions/tags";
+import { getTeamProjectsForTask, addTaskToProject, removeTaskFromProject } from "@/lib/actions/projects";
 import { format } from "date-fns";
 import {
   X,
@@ -26,6 +27,8 @@ import {
   Activity,
   Plus,
   Upload,
+  FolderOpen,
+  ChevronDown,
 } from "lucide-react";
 
 interface TeamMember {
@@ -96,6 +99,10 @@ interface FullTask {
   }>;
   subtasks: Subtask[];
   tags: Array<{ tag: TagItem }>;
+  taskProjects: Array<{
+    project: { id: string; name: string; color: string };
+    section: { id: string; name: string };
+  }>;
 }
 
 const PRIORITY_STYLES: Record<string, string> = {
@@ -138,6 +145,13 @@ export function TaskDetailModal({ taskId, teamMembers, currentUserId, onClose }:
   const [newTagName, setNewTagName] = useState("");
   const [showAssigneeDropdown, setShowAssigneeDropdown] = useState(false);
   const [assigneeSearch, setAssigneeSearch] = useState("");
+  const [showProjectDropdown, setShowProjectDropdown] = useState(false);
+  const [teamProjectsData, setTeamProjectsData] = useState<{
+    teamProjects: Array<{ id: string; name: string; color: string; sections: Array<{ id: string; name: string }> }>;
+    currentProjects: Array<{ projectId: string; projectName: string; isOrigin: boolean; sectionId: string | null; sectionName: string | null }>;
+  } | null>(null);
+  const [selectedAddProject, setSelectedAddProject] = useState("");
+  const [selectedAddSection, setSelectedAddSection] = useState("");
 
   useEffect(() => {
     loadTask();
@@ -163,6 +177,12 @@ export function TaskDetailModal({ taskId, teamMembers, currentUserId, onClose }:
   async function loadTags() {
     const data = await getTags();
     setAllTags(data as unknown as TagItem[]);
+  }
+
+  async function loadProjectLinks() {
+    const data = await getTeamProjectsForTask(taskId);
+    if ("error" in data) return;
+    setTeamProjectsData(data as typeof teamProjectsData);
   }
 
   async function handleToggleComplete() {
@@ -330,6 +350,27 @@ export function TaskDetailModal({ taskId, teamMembers, currentUserId, onClose }:
       }
     });
     setShowTagDropdown(false);
+  }
+
+  async function handleAddToProject() {
+    if (!task || !selectedAddProject || !selectedAddSection) return;
+    startTransition(async () => {
+      await addTaskToProject(task.id, selectedAddProject, selectedAddSection);
+      setSelectedAddProject("");
+      setSelectedAddSection("");
+      setShowProjectDropdown(false);
+      await loadProjectLinks();
+      await loadTask();
+    });
+  }
+
+  async function handleRemoveFromProject(projectId: string) {
+    if (!task) return;
+    startTransition(async () => {
+      await removeTaskFromProject(task.id, projectId);
+      await loadProjectLinks();
+      await loadTask();
+    });
   }
 
   async function handleRemoveTag(tagId: string) {
@@ -509,6 +550,140 @@ export function TaskDetailModal({ taskId, teamMembers, currentUserId, onClose }:
                     </div>
                   )}
                 </div>
+              </div>
+
+              {/* Projects — multi-project membership */}
+              <div className="bg-[#1a1a1a] border border-[#262626] rounded-xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="flex items-center gap-1.5 text-xs font-medium text-[#737373]">
+                    <FolderOpen className="w-3.5 h-3.5" />
+                    Projects
+                  </label>
+                  <button
+                    onClick={() => {
+                      if (!showProjectDropdown && !teamProjectsData) loadProjectLinks();
+                      else if (!showProjectDropdown && teamProjectsData) { /* already loaded */ }
+                      setShowProjectDropdown(!showProjectDropdown);
+                    }}
+                    className="text-xs text-[#6B7C42] hover:text-[#4A5628] font-medium flex items-center gap-1"
+                  >
+                    <Plus className="w-3 h-3" />
+                    Add to project
+                  </button>
+                </div>
+
+                {/* Current projects */}
+                <div className="space-y-1.5">
+                  {/* Origin project */}
+                  <div className="flex items-center justify-between px-2.5 py-1.5 bg-[#141414] rounded-lg border border-[#262626]">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <FolderOpen className="w-3.5 h-3.5 text-[#737373] flex-shrink-0" />
+                      <span className="text-sm text-[#d4d4d4] truncate">{task.project.name}</span>
+                      <span className="text-[10px] text-[#525252] bg-[#2a2a2a] px-1.5 py-0.5 rounded">
+                        {task.section.name}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-[#525252] uppercase font-medium tracking-wider">Origin</span>
+                  </div>
+
+                  {/* Linked projects */}
+                  {(task.taskProjects || []).map((tp) => (
+                    <div key={tp.project.id} className="flex items-center justify-between px-2.5 py-1.5 bg-[#141414] rounded-lg border border-[#262626] group">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className="w-3 h-3 rounded-sm flex-shrink-0" style={{ backgroundColor: tp.project.color }} />
+                        <span className="text-sm text-[#d4d4d4] truncate">{tp.project.name}</span>
+                        <span className="text-[10px] text-[#525252] bg-[#2a2a2a] px-1.5 py-0.5 rounded">
+                          {tp.section.name}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => handleRemoveFromProject(tp.project.id)}
+                        className="opacity-0 group-hover:opacity-100 p-0.5 text-[#525252] hover:text-red-500 transition"
+                        title="Remove from project"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Add to project dropdown */}
+                {showProjectDropdown && (
+                  <div className="mt-3 p-3 bg-[#141414] border border-[#262626] rounded-lg space-y-3">
+                    {!teamProjectsData ? (
+                      <div className="flex items-center justify-center py-2">
+                        <Loader2 className="w-4 h-4 text-[#6B7C42] animate-spin" />
+                      </div>
+                    ) : (() => {
+                      const linkedIds = new Set([
+                        task.project.id,
+                        ...(task.taskProjects || []).map((tp) => tp.project.id),
+                      ]);
+                      const available = teamProjectsData.teamProjects.filter((p) => !linkedIds.has(p.id));
+                      if (available.length === 0) {
+                        return <p className="text-xs text-[#525252] italic">No other projects in this team</p>;
+                      }
+                      return (
+                        <>
+                          <div>
+                            <label className="text-xs text-[#737373] mb-1 block">Project</label>
+                            <select
+                              value={selectedAddProject}
+                              onChange={(e) => {
+                                setSelectedAddProject(e.target.value);
+                                setSelectedAddSection("");
+                              }}
+                              className="w-full px-2.5 py-1.5 text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none"
+                            >
+                              <option value="">Select project...</option>
+                              {available.map((p) => (
+                                <option key={p.id} value={p.id}>{p.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                          {selectedAddProject && (() => {
+                            const proj = available.find((p) => p.id === selectedAddProject);
+                            if (!proj || proj.sections.length === 0) return <p className="text-xs text-[#525252]">No sections</p>;
+                            return (
+                              <div>
+                                <label className="text-xs text-[#737373] mb-1 block">Section</label>
+                                <select
+                                  value={selectedAddSection}
+                                  onChange={(e) => setSelectedAddSection(e.target.value)}
+                                  className="w-full px-2.5 py-1.5 text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none"
+                                >
+                                  <option value="">Select section...</option>
+                                  {proj.sections.map((s) => (
+                                    <option key={s.id} value={s.id}>{s.name}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            );
+                          })()}
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={handleAddToProject}
+                              disabled={!selectedAddProject || !selectedAddSection || isPending}
+                              className="px-3 py-1.5 text-xs font-medium text-white bg-[#6B7A45] rounded-lg hover:bg-[#5a6838] disabled:opacity-50 transition"
+                            >
+                              {isPending ? "Adding..." : "Add"}
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowProjectDropdown(false);
+                                setSelectedAddProject("");
+                                setSelectedAddSection("");
+                              }}
+                              className="px-3 py-1.5 text-xs font-medium text-[#a3a3a3] bg-[#2a2a2a] rounded-lg hover:bg-[#3a3a3a] transition"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                )}
               </div>
 
               {/* Properties */}

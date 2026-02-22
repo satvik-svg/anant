@@ -2,13 +2,22 @@
 
 import { useState, useRef, useEffect } from "react";
 import { createTask } from "@/lib/actions/tasks";
-import { X, Loader2, ChevronDown, Check, Users } from "lucide-react";
+import { addTaskToProject } from "@/lib/actions/projects";
+import { X, Loader2, ChevronDown, Check, Users, FolderOpen } from "lucide-react";
+
+interface OtherProject {
+  id: string;
+  name: string;
+  color: string;
+  sections: Array<{ id: string; name: string }>;
+}
 
 interface Props {
   projectId: string;
   sectionId: string;
   sections: Array<{ id: string; name: string }>;
   teamMembers: Array<{ id: string; name: string; email: string }>;
+  otherProjects?: OtherProject[];
   onClose: () => void;
 }
 
@@ -17,6 +26,7 @@ export function CreateTaskDialog({
   sectionId,
   sections,
   teamMembers,
+  otherProjects,
   onClose,
 }: Props) {
   const [loading, setLoading] = useState(false);
@@ -25,6 +35,11 @@ export function CreateTaskDialog({
   const [showAssigneeDropdown, setShowAssigneeDropdown] = useState(false);
   const [assigneeSearch, setAssigneeSearch] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  // Multi-project: list of { projectId, sectionId } to also add the task to
+  const [additionalProjects, setAdditionalProjects] = useState<Array<{ projectId: string; sectionId: string }>>([]);
+  const [showProjectPicker, setShowProjectPicker] = useState(false);
+  const [pickProjectId, setPickProjectId] = useState("");
+  const [pickSectionId, setPickSectionId] = useState("");
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -58,12 +73,21 @@ export function CreateTaskDialog({
       formData.append("assigneeId", id);
     }
     const result = await createTask(formData);
-    setLoading(false);
     if (result?.error) {
+      setLoading(false);
       setError(result.error);
-    } else {
-      onClose();
+      return;
     }
+    // Add to additional projects
+    if (result?.taskId && additionalProjects.length > 0) {
+      await Promise.all(
+        additionalProjects.map((ap) =>
+          addTaskToProject(result.taskId!, ap.projectId, ap.sectionId)
+        )
+      );
+    }
+    setLoading(false);
+    onClose();
   }
 
   return (
@@ -273,6 +297,109 @@ export function CreateTaskDialog({
               />
             </div>
           </div>
+
+          {/* Also add to other projects */}
+          {otherProjects && otherProjects.length > 0 && (
+            <div>
+              <label className="flex items-center gap-1.5 text-sm font-medium text-[#a3a3a3] mb-2">
+                <FolderOpen className="w-4 h-4" />
+                Also add to projects
+              </label>
+
+              {/* Selected additional projects */}
+              {additionalProjects.length > 0 && (
+                <div className="space-y-1.5 mb-2">
+                  {additionalProjects.map((ap) => {
+                    const proj = otherProjects.find((p) => p.id === ap.projectId);
+                    const sec = proj?.sections.find((s) => s.id === ap.sectionId);
+                    return (
+                      <div key={ap.projectId} className="flex items-center justify-between px-2.5 py-1.5 bg-[#141414] rounded-lg border border-[#262626]">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-3 h-3 rounded-sm flex-shrink-0" style={{ backgroundColor: proj?.color || "#6366f1" }} />
+                          <span className="text-sm text-[#d4d4d4] truncate">{proj?.name}</span>
+                          <span className="text-[10px] text-[#525252] bg-[#2a2a2a] px-1.5 py-0.5 rounded">{sec?.name}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setAdditionalProjects((prev) => prev.filter((p) => p.projectId !== ap.projectId))}
+                          className="p-0.5 text-[#525252] hover:text-red-500"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Add project picker */}
+              {showProjectPicker ? (
+                <div className="p-3 bg-[#141414] border border-[#262626] rounded-lg space-y-2">
+                  <select
+                    value={pickProjectId}
+                    onChange={(e) => { setPickProjectId(e.target.value); setPickSectionId(""); }}
+                    className="w-full px-2.5 py-1.5 text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none"
+                  >
+                    <option value="">Select project...</option>
+                    {otherProjects
+                      .filter((p) => !additionalProjects.some((ap) => ap.projectId === p.id))
+                      .map((p) => (
+                        <option key={p.id} value={p.id}>{p.name}</option>
+                      ))}
+                  </select>
+                  {pickProjectId && (() => {
+                    const proj = otherProjects.find((p) => p.id === pickProjectId);
+                    if (!proj || proj.sections.length === 0) return null;
+                    return (
+                      <select
+                        value={pickSectionId}
+                        onChange={(e) => setPickSectionId(e.target.value)}
+                        className="w-full px-2.5 py-1.5 text-sm bg-[#2a2a2a] border border-[#3a3a3a] text-[#f5f5f5] rounded-lg focus:ring-1 focus:ring-[#6B7A45] outline-none"
+                      >
+                        <option value="">Select section...</option>
+                        {proj.sections.map((s) => (
+                          <option key={s.id} value={s.id}>{s.name}</option>
+                        ))}
+                      </select>
+                    );
+                  })()}
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (pickProjectId && pickSectionId) {
+                          setAdditionalProjects((prev) => [...prev, { projectId: pickProjectId, sectionId: pickSectionId }]);
+                          setPickProjectId("");
+                          setPickSectionId("");
+                          setShowProjectPicker(false);
+                        }
+                      }}
+                      disabled={!pickProjectId || !pickSectionId}
+                      className="px-3 py-1 text-xs font-medium text-white bg-[#6B7A45] rounded-lg hover:bg-[#5a6838] disabled:opacity-50"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setShowProjectPicker(false); setPickProjectId(""); setPickSectionId(""); }}
+                      className="px-3 py-1 text-xs font-medium text-[#a3a3a3] bg-[#2a2a2a] rounded-lg hover:bg-[#3a3a3a]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowProjectPicker(true)}
+                  className="flex items-center gap-1.5 text-xs text-[#6B7C42] hover:text-[#4A5628] font-medium"
+                >
+                  <FolderOpen className="w-3.5 h-3.5" />
+                  Add to another project
+                </button>
+              )}
+            </div>
+          )}
 
           <div className="flex gap-3 pt-2">
             <button

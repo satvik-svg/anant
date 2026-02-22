@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Circle,
   Clock,
+  FolderOpen,
 } from "lucide-react";
 
 interface Task {
@@ -25,7 +26,7 @@ interface Task {
   completed: boolean;
   assignee: { id: string; name: string; avatar: string | null; email: string } | null;
   assignees?: Array<{ user: { id: string; name: string; avatar: string | null; email: string } }>;
-  _count: { comments: number; attachments: number };
+  _count: { comments: number; attachments: number; taskProjects?: number };
 }
 
 interface Props {
@@ -151,6 +152,14 @@ export function TaskCard({ task, onClick }: Props) {
           <div className="flex items-center gap-1 text-xs text-[#525252]">
             <Paperclip className="w-3 h-3" />
             {task._count.attachments}
+          </div>
+        )}
+
+        {/* Multi-project badge */}
+        {(task._count.taskProjects ?? 0) > 0 && (
+          <div className="flex items-center gap-1 text-xs text-[#9aad6f]" title={`In ${(task._count.taskProjects ?? 0) + 1} projects`}>
+            <FolderOpen className="w-3 h-3" />
+            {(task._count.taskProjects ?? 0) + 1}
           </div>
         )}
 

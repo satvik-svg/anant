@@ -75,12 +75,13 @@ model Project {
   teamId    String
   creatorId String
 
-  team       Team        @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  creator    User        @relation("ProjectCreator", fields: [creatorId], references: [id])
-  sections   Section[]
-  tasks      Task[]
-  portfolios PortfolioProject[]
-  invites    ProjectInvite[]
+  team        Team        @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  creator     User        @relation("ProjectCreator", fields: [creatorId], references: [id])
+  sections    Section[]
+  tasks       Task[]
+  portfolios  PortfolioProject[]
+  invites     ProjectInvite[]
+  linkedTasks TaskProject[]
 }
 
 model Section {
@@ -92,6 +93,7 @@ model Section {
   projectId String
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   tasks     Task[]
+  linkedTasks TaskProject[]
 }
 
 model Task {
@@ -124,6 +126,7 @@ model Task {
   tags             TaskTag[]
   assignees        TaskAssignee[]
   calendarEventId  String?
+  taskProjects     TaskProject[]
 }
 
 model Subtask {
@@ -337,6 +340,21 @@ model Note {
   updatedAt DateTime @updatedAt
 
   user User @relation("NoteOwner", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TaskProject {
+  id        String   @id @default(uuid())
+  taskId    String
+  projectId String
+  sectionId String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  task    Task    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, projectId])
 }
 
 model Account {

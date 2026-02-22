@@ -93,10 +93,8 @@ export async function createTask(formData: FormData) {
 
   revalidatePath(`/dashboard/projects/${projectId}`, "page");
   after(() => invalidateProjectCache(projectId));
-  return { success: true };
-}
-
-export async function updateTask(taskId: string, data: {
+  return { success: true, taskId: task.id };
+}export async function updateTask(taskId: string, data: {
   title?: string;
   description?: string;
   priority?: string;
@@ -289,6 +287,12 @@ export async function getTask(taskId: string) {
       tags: {
         include: { tag: true },
       },
+      taskProjects: {
+        include: {
+          project: { select: { id: true, name: true, color: true } },
+          section: { select: { id: true, name: true } },
+        },
+      },
       section: true,
       project: { select: { id: true, name: true } },
     },
@@ -323,7 +327,7 @@ export async function getFilteredTasks(projectId: string, filters: {
         },
       },
       section: { select: { id: true, name: true } },
-      _count: { select: { comments: true, attachments: true, subtasks: true } },
+      _count: { select: { comments: true, attachments: true, subtasks: true, taskProjects: true } },
       tags: { include: { tag: true } },
     },
     orderBy: { order: "asc" },
